@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en">
+  <a href="index.html" style="position:fixed;top:1rem;left:1rem;z-index:9999;background:white;border:1px solid #e2e8f0;border-radius:.75rem;padding:.5rem .85rem;font-size:.8rem;font-weight:600;color:#2b6cb0;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;align-items:center;gap:.4rem;">← Home</a>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioMed Informatics · Applied Playbook</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',system-ui,-apple-system,sans-serif;}
+  body{background:#eef2f6;color:#1a202c;line-height:1.55;padding:1.5rem 1rem 3rem;}
+  .container{max-width:1200px;margin:0 auto;}
+
+  /* HEADER */
+  .compact-header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;background:white;border-radius:1.5rem;padding:1rem 1.75rem;box-shadow:0 4px 12px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.06);margin-bottom:2rem;border:1px solid #dde3ea;}
+  .header-title{display:flex;align-items:center;gap:.75rem;}
+  .header-title i{font-size:2rem;color:#1e4e8c;background:#e8f0fe;padding:.5rem;border-radius:1rem;}
+  .header-title h1{font-size:1.4rem;font-weight:600;letter-spacing:-.01em;}
+  .header-title span{font-weight:400;color:#4a5568;font-size:.9rem;display:block;margin-top:.15rem;}
+  .header-meta{display:flex;gap:1.25rem;font-size:.85rem;color:#4a5568;background:#f1f5f9;padding:.5rem 1rem;border-radius:2rem;}
+  .header-meta i{margin-right:.35rem;color:#1e4e8c;}
+
+  .path-label{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;padding-left:.25rem;}
+  .path-label i{color:#1e4e8c;font-size:1.25rem;}
+  .path-label h2{font-size:1.2rem;font-weight:500;color:#2d3748;}
+  .path-label p{font-size:.85rem;color:#718096;margin-left:auto;font-style:italic;}
+
+  /* STAGES */
+  .stage-group{margin-bottom:2.5rem;}
+  .stage-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;border-bottom:2px solid #dde3ea;padding-bottom:.5rem;}
+  .stage-number{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;background:#1e4e8c;color:white;font-weight:600;font-size:1rem;border-radius:.75rem;box-shadow:0 2px 6px rgba(30,78,140,.25);}
+  .stage-header h3{font-size:1.2rem;font-weight:600;color:#1a202c;}
+  .stage-header .stage-desc{font-size:.85rem;color:#718096;margin-left:.5rem;}
+
+  /* CARDS */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;}
+  .destination-card{background:white;border-radius:1.25rem;padding:1.35rem 1.5rem;box-shadow:0 4px 12px rgba(0,0,0,.03),0 1px 3px rgba(0,0,0,.04);border:1px solid #dde3ea;border-left:5px solid #1e4e8c;transition:all .15s ease;display:flex;flex-direction:column;cursor:pointer;text-align:left;}
+  .destination-card:hover{transform:translateY(-2px);box-shadow:0 12px 24px -8px rgba(0,0,0,.1),0 2px 8px rgba(0,0,0,.04);border-color:#b0bec5;}
+  .destination-card:focus-visible{outline:3px solid #1e4e8c;outline-offset:2px;}
+  .card-bio{border-left-color:#2f855a;}
+  .card-informatics{border-left-color:#1e4e8c;}
+  .card-mixed{border-left-color:#6b46c1;}
+  .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;}
+  .card-header i{font-size:1.5rem;background:#f1f5f9;padding:.45rem;border-radius:.85rem;color:#2d3748;}
+  .card-category{font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;font-weight:600;padding:.2rem .6rem;border-radius:2rem;background:#eef2f6;color:#4a5568;}
+  .card-title{font-size:1.05rem;font-weight:600;margin-bottom:.35rem;color:#1a202c;line-height:1.3;}
+  .card-desc{font-size:.82rem;color:#4a5568;margin-bottom:.85rem;flex:1;}
+  .card-footer{display:flex;align-items:center;justify-content:space-between;font-size:.72rem;color:#718096;border-top:1px solid #edf2f7;padding-top:.7rem;}
+  .card-footer .topics{display:flex;flex-wrap:wrap;gap:.3rem;}
+  .topic-pill{background:#f1f5f9;padding:.15rem .45rem;border-radius:1rem;font-size:.68rem;color:#2d3748;}
+  .card-number{font-weight:700;color:#1e4e8c;background:#e8f0fe;border-radius:.5rem;padding:.1rem .5rem;font-size:.75rem;}
+
+  /* LEGEND */
+  .legend{display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:2rem;padding:1rem 1.5rem;background:white;border-radius:1rem;border:1px solid #dde3ea;font-size:.8rem;color:#4a5568;align-items:center;}
+  .legend-item{display:flex;align-items:center;gap:.4rem;}
+  .legend-dot{width:12px;height:12px;border-radius:4px;}
+  .dot-bio{background:#2f855a;}.dot-info{background:#1e4e8c;}.dot-mixed{background:#6b46c1;}
+  .legend-ai{background:#f3e8ff;color:#6b46c1;padding:.25rem .6rem;border-radius:1rem;font-size:.75rem;font-weight:600;}
+
+  /* ============ MODAL ============ */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.6);display:none;align-items:center;justify-content:center;padding:1rem;z-index:1000;backdrop-filter:blur(3px);}
+  .modal-backdrop.open{display:flex;}
+  .modal{background:white;border-radius:1.5rem;max-width:950px;width:100%;max-height:92vh;overflow-y:auto;padding:0;box-shadow:0 25px 50px -12px rgba(0,0,0,.3);position:relative;animation:modalIn .18s ease-out;}
+  @keyframes modalIn{from{opacity:0;transform:translateY(12px) scale(.98);}to{opacity:1;transform:none;}}
+  .modal-close{position:absolute;top:1rem;right:1rem;width:2.25rem;height:2.25rem;border-radius:.75rem;border:none;background:#f1f5f9;color:#4a5568;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background .12s;}
+  .modal-close:hover{background:#e2e8f0;color:#1a202c;}
+
+  .lesson-body{padding:2rem 2rem 1rem;}
+  .modal-badge{display:inline-block;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;font-weight:600;padding:.25rem .75rem;border-radius:2rem;margin-bottom:.85rem;}
+  .badge-bio{background:#e6fffa;color:#2f855a;}
+  .badge-informatics{background:#e8f0fe;color:#1e4e8c;}
+  .badge-mixed{background:#f3e8ff;color:#6b46c1;}
+  .modal h2{font-size:1.45rem;font-weight:600;margin-bottom:.4rem;color:#1a202c;padding-right:2.5rem;}
+  .modal .modal-meta{font-size:.8rem;color:#718096;margin-bottom:1.25rem;display:flex;gap:1rem;flex-wrap:wrap;}
+  .modal .modal-meta i{margin-right:.3rem;color:#1e4e8c;}
+
+  .lesson-section{margin-bottom:1.5rem;}
+  .lesson-section h3{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#1e4e8c;margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem;}
+  .lesson-section p{font-size:.92rem;color:#2d3748;margin-bottom:.6rem;}
+  .lesson-section ul{list-style:none;display:flex;flex-direction:column;gap:.4rem;margin-left:.25rem;}
+  .lesson-section ul li{display:flex;gap:.6rem;font-size:.88rem;color:#2d3748;}
+  .lesson-section ul li i{color:#2f855a;margin-top:.2rem;flex-shrink:0;font-size:.8rem;}
+  .lesson-section ul li strong{color:#1a202c;}
+
+  /* VISUAL BLOCKS */
+  .visual-block{background:#f8fafc;border:1px solid #dde3ea;border-radius:1rem;padding:1.25rem;margin:.75rem 0;position:relative;}
+  .visual-block .visual-title{font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#4a5568;margin-bottom:.85rem;display:flex;align-items:center;gap:.4rem;}
+  .visual-block .visual-title i{color:#6b46c1;}
+
+  /* ==== REALISTIC UI MOCKUPS ==== */
+  .ui-mockup{background:#f1f5f9;border-radius:.75rem;overflow:hidden;border:1px solid #cbd5e0;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+  .ui-toolbar{background:linear-gradient(180deg,#ffffff,#f1f5f9);border-bottom:1px solid #cbd5e0;padding:.5rem .85rem;display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:#4a5568;}
+  .ui-toolbar .dot{width:8px;height:8px;border-radius:50%;}
+  .ui-toolbar .dot.red{background:#fc8181;}
+  .ui-toolbar .dot.yellow{background:#f6e05e;}
+  .ui-toolbar .dot.green{background:#68d391;}
+  .ui-toolbar .ui-title{margin-left:.5rem;font-weight:600;color:#2d3748;}
+  .ui-body{padding:1rem;background:white;}
+
+  /* EHR screen mockup */
+  .ehr-screen{display:flex;min-height:180px;font-size:.75rem;}
+  .ehr-sidebar{width:120px;background:#1e293b;color:#cbd5e0;padding:.6rem .5rem;font-size:.68rem;flex-shrink:0;}
+  .ehr-sidebar .nav-item{padding:.35rem .5rem;border-radius:.35rem;margin-bottom:.2rem;display:flex;align-items:center;gap:.35rem;}
+  .ehr-sidebar .nav-item.active{background:#334155;color:white;}
+  .ehr-main{flex:1;padding:.75rem;background:#f8fafc;}
+  .ehr-header{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem;padding-bottom:.5rem;border-bottom:1px solid #e2e8f0;}
+  .ehr-avatar{width:28px;height:28px;border-radius:50%;background:#4299e1;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.7rem;}
+  .ehr-patient-info{font-size:.72rem;}
+  .ehr-patient-info strong{color:#1a202c;}
+  .ehr-patient-info span{color:#718096;display:block;}
+  .ehr-vitals{display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin-bottom:.5rem;}
+  .ehr-vital{background:white;border:1px solid #e2e8f0;border-radius:.4rem;padding:.4rem;text-align:center;}
+  .ehr-vital .label{font-size:.6rem;color:#718096;text-transform:uppercase;}
+  .ehr-vital .value{font-size:.85rem;font-weight:700;color:#1a202c;}
+  .ehr-vital .value.warn{color:#c05621;}
+  .ehr-vital .value.crit{color:#c53030;}
+  .ehr-notes{background:white;border:1px solid #e2e8f0;border-radius:.4rem;padding:.5rem;font-size:.68rem;color:#4a5568;line-height:1.5;}
+
+  /* Lab dashboard mockup */
+  .lab-dash{font-size:.72rem;}
+  .lab-dash-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem;}
+  .lab-dash-header h4{font-size:.8rem;font-weight:700;color:#1a202c;}
+  .lab-dash-header .badge{background:#fed7d7;color:#9b2c2c;padding:.15rem .5rem;border-radius:1rem;font-size:.6rem;font-weight:700;}
+  .lab-table{width:100%;border-collapse:collapse;font-size:.68rem;}
+  .lab-table th{background:#f1f5f9;padding:.35rem .4rem;text-align:left;color:#4a5568;font-weight:600;border-bottom:1px solid #e2e8f0;}
+  .lab-table td{padding:.35rem .4rem;border-bottom:1px solid #edf2f7;}
+  .lab-table .flag-high{color:#c53030;font-weight:700;}
+  .lab-table .flag-warn{color:#c05621;font-weight:600;}
+  .lab-table .flag-ok{color:#2f855a;font-weight:600;}
+
+  /* Sequencing report mockup */
+  .seq-report{font-size:.72rem;}
+  .seq-header{background:#1a202c;color:#e2e8f0;padding:.55rem .75rem;border-radius:.5rem .5rem 0 0;display:flex;justify-content:space-between;align-items:center;}
+  .seq-header strong{color:#68d391;}
+  .seq-body{background:#2d3748;color:#e2e8f0;padding:.75rem;border-radius:0 0 .5rem .5rem;font-family:'SF Mono',Menlo,monospace;font-size:.68rem;line-height:1.6;}
+  .seq-body .gene{color:#f6e05e;}
+  .seq-body .var{color:#fc8181;font-weight:700;}
+  .seq-body .ref{color:#63b3ed;}
+  .seq-body .comment{color:#718096;}
+
+  /* ML dashboard mockup */
+  .ml-dash{font-size:.72rem;}
+  .ml-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.75rem;}
+  .ml-metric{background:white;border:1px solid #e2e8f0;border-radius:.5rem;padding:.5rem;text-align:center;}
+  .ml-metric .label{font-size:.58rem;color:#718096;text-transform:uppercase;letter-spacing:.04em;}
+  .ml-metric .value{font-size:1rem;font-weight:700;color:#1a202c;margin-top:.15rem;}
+  .ml-metric .value.good{color:#2f855a;}
+  .ml-metric .value.warn{color:#c05621;}
+  .ml-metric .sub{font-size:.55rem;color:#a0aec0;margin-top:.1rem;}
+
+  /* CDS alert mockup (realistic) */
+  .cds-alert{background:white;border:1px solid #e2e8f0;border-left:5px solid #ed8936;border-radius:.5rem;padding:.75rem .85rem;box-shadow:0 2px 8px rgba(0,0,0,.06);font-size:.75rem;}
+  .cds-alert .alert-header{display:flex;align-items:center;gap:.4rem;font-weight:700;color:#c05621;margin-bottom:.35rem;font-size:.78rem;}
+  .cds-alert .alert-body{color:#2d3748;font-size:.78rem;line-height:1.5;}
+  .cds-alert .alert-actions{display:flex;gap:.4rem;margin-top:.6rem;}
+  .cds-alert .alert-btn{padding:.3rem .7rem;border-radius:.35rem;font-size:.68rem;font-weight:600;border:none;cursor:default;}
+  .cds-alert .alert-btn.primary{background:#ed8936;color:white;}
+  .cds-alert .alert-btn.secondary{background:#edf2f7;color:#4a5568;}
+
+  /* FHIR resource mockup */
+  .fhir-resource{background:#1a202c;border-radius:.6rem;padding:.85rem 1rem;font-family:'SF Mono',Menlo,monospace;font-size:.72rem;color:#e2e8f0;line-height:1.7;overflow-x:auto;}
+  .fhir-resource .key{color:#63b3ed;}
+  .fhir-resource .str{color:#9ae6b4;}
+  .fhir-resource .num{color:#fbd38d;}
+  .fhir-resource .comment{color:#718096;font-style:italic;}
+
+  /* Big-O / ROC etc keep as needed */
+  .graph-wrap{background:white;border-radius:.85rem;padding:1rem;border:1px solid #e2e8f0;}
+  .graph-svg{width:100%;height:auto;}
+
+  .data-table{width:100%;border-collapse:collapse;font-size:.8rem;background:white;border-radius:.75rem;overflow:hidden;border:1px solid #e2e8f0;}
+  .data-table th{background:#1e4e8c;color:white;padding:.55rem .7rem;text-align:left;font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;}
+  .data-table td{padding:.5rem .7rem;border-bottom:1px solid #edf2f7;color:#2d3748;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .data-table tr:nth-child(even) td{background:#f7fafc;}
+  .data-table .highlight{background:#fefcbf !important;font-weight:600;}
+
+  .code-sample{background:#1a202c;border-radius:.85rem;padding:1rem 1.15rem;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:.8rem;color:#e2e8f0;overflow-x:auto;line-height:1.7;}
+  .code-sample .kw{color:#63b3ed;}
+  .code-sample .str{color:#9ae6b4;}
+  .code-sample .cm{color:#718096;font-style:italic;}
+  .code-sample .num{color:#fbd38d;}
+  .code-sample .fn{color:#d6bcfa;}
+
+  /* AI PROMPT LAB */
+  .ai-panel{background:linear-gradient(135deg,#faf5ff 0%,#f3e8ff 100%);border-top:2px solid #d6bcfa;padding:1.5rem 2rem;}
+  .ai-header{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;}
+  .ai-header .ai-icon{width:2.25rem;height:2.25rem;background:#6b46c1;color:white;border-radius:.75rem;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 2px 8px rgba(107,70,193,.3);}
+  .ai-header h3{font-size:1rem;font-weight:600;color:#44337a;}
+  .ai-header .ai-status{font-size:.7rem;background:#e9d8fd;color:#6b46c1;padding:.2rem .55rem;border-radius:1rem;font-weight:600;margin-left:auto;}
+
+  .prompt-lab{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .prompt-lab-col{display:flex;flex-direction:column;gap:.6rem;}
+  .lab-card{background:white;border-radius:.85rem;padding:.85rem 1rem;border:1px solid #e9d8fd;}
+  .lab-card .lab-label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#6b46c1;margin-bottom:.4rem;display:flex;align-items:center;gap:.35rem;}
+  .lab-card .lab-hint{font-size:.72rem;color:#718096;margin-bottom:.5rem;}
+  .prompt-textarea{width:100%;border:1px solid #d6bcfa;border-radius:.6rem;padding:.6rem .75rem;font-size:.82rem;font-family:'SF Mono',Menlo,monospace;resize:vertical;min-height:70px;outline:none;background:white;color:#2d3748;}
+  .prompt-textarea:focus{border-color:#6b46c1;box-shadow:0 0 0 3px rgba(107,70,193,.1);}
+  .lab-actions{display:flex;gap:.5rem;margin-top:.5rem;flex-wrap:wrap;}
+  .lab-btn{border:none;border-radius:.6rem;padding:.5rem .85rem;font-size:.78rem;font-weight:600;cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:.35rem;}
+  .lab-btn.primary{background:#6b46c1;color:white;}
+  .lab-btn.primary:hover{background:#553c9a;}
+  .lab-btn.secondary{background:#edf2f7;color:#4a5568;}
+  .lab-btn.secondary:hover{background:#e2e8f0;}
+  .lab-btn:disabled{opacity:.5;cursor:not-allowed;}
+  .prompt-chips{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.4rem;}
+  .prompt-chip{background:#faf5ff;border:1px solid #d6bcfa;color:#553c9a;font-size:.7rem;padding:.3rem .6rem;border-radius:1rem;cursor:pointer;transition:all .12s;font-weight:500;}
+  .prompt-chip:hover{background:#6b46c1;color:white;border-color:#6b46c1;}
+  .response-box{background:#f7fafc;border-radius:.6rem;padding:.7rem .85rem;font-size:.82rem;color:#2d3748;min-height:80px;border:1px dashed #d6bcfa;line-height:1.6;}
+  .response-box .placeholder{color:#a0aec0;font-style:italic;font-size:.8rem;}
+  .response-box .ai-answer{color:#2d3748;}
+  .why-box{background:#faf5ff;border-left:3px solid #6b46c1;border-radius:.5rem;padding:.6rem .8rem;font-size:.78rem;color:#44337a;margin-top:.5rem;}
+  .why-box strong{color:#6b46c1;}
+  .prompt-score{display:flex;align-items:center;gap:.5rem;margin-top:.5rem;font-size:.75rem;color:#4a5568;}
+  .score-bar{flex:1;height:.5rem;background:#e2e8f0;border-radius:1rem;overflow:hidden;}
+  .score-fill{height:100%;border-radius:1rem;background:linear-gradient(90deg,#48bb78,#2f855a);transition:width .4s ease;}
+
+  @media(max-width:760px){.prompt-lab{grid-template-columns:1fr;}}
+  @media(max-width:680px){
+    .compact-header{flex-direction:column;align-items:flex-start;gap:1rem;}
+    .header-meta{width:100%;justify-content:space-between;flex-wrap:wrap;}
+    .path-label{flex-wrap:wrap;}
+    .path-label p{margin-left:0;width:100%;}
+    .lesson-body{padding:1.5rem 1.25rem 1rem;}
+    .ai-panel{padding:1.25rem;}
+    .modal h2{font-size:1.2rem;}
+    .ehr-screen{flex-direction:column;}
+    .ehr-sidebar{width:100%;display:flex;gap:.3rem;flex-wrap:wrap;}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="compact-header">
+    <div class="header-title">
+      <i class="fas fa-briefcase-medical"></i>
+      <div>
+        <h1>Biomedical Informatics · Applied Playbook</h1>
+        <span>real-world workflows · realistic mockups &amp; AI prompt lab</span>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div><i class="fas fa-layer-group"></i> 3 tracks</div>
+      <div><i class="fas fa-clipboard-list"></i> 12 playbook cards</div>
+      <div><i class="fas fa-laptop-medical"></i> work-ready</div>
+    </div>
+  </header>
+
+  <div class="path-label">
+    <i class="fas fa-route"></i>
+    <h2>Applied workflow playbook</h2>
+    <p>click a card to see the workflow, realistic screen mockups &amp; draft work prompts</p>
+  </div>
+
+  <!-- TRACK 1 -->
+  <section class="stage-group">
+    <div class="stage-header">
+      <span class="stage-number">1</span>
+      <h3>Clinical data &amp; bench workflows</h3>
+      <span class="stage-desc">everyday tasks you'll actually do</span>
+    </div>
+    <div class="card-grid">
+      <button class="destination-card card-bio" data-modal="m-1-1">
+        <div class="card-header"><i class="fas fa-notes-medical"></i><span class="card-category">clinical ops</span></div>
+        <div class="card-title">Triage a new patient intake</div>
+        <div class="card-desc">Read vitals, flag abnormal labs, and draft a summary note — with a realistic EHR screen.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">EHR</span><span class="topic-pill">triage</span></div><span class="card-number">1.1</span></div>
+      </button>
+      <button class="destination-card card-bio" data-modal="m-1-2">
+        <div class="card-header"><i class="fas fa-flask"></i><span class="card-category">lab ops</span></div>
+        <div class="card-title">Review a lab panel &amp; flag values</div>
+        <div class="card-desc">Scan a realistic lab dashboard, mark high/low results, and prepare a clinician handoff.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">labs</span><span class="topic-pill">flags</span></div><span class="card-number">1.2</span></div>
+      </button>
+      <button class="destination-card card-bio" data-modal="m-1-3">
+        <div class="card-header"><i class="fas fa-chart-line"></i><span class="card-category">research ops</span></div>
+        <div class="card-title">Draft a PK/PD summary from a curve</div>
+        <div class="card-desc">Interpret a drug-concentration graph, compute half-life, and write a short summary.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">PK/PD</span><span class="topic-pill">graph</span></div><span class="card-number">1.3</span></div>
+      </button>
+      <button class="destination-card card-bio" data-modal="m-1-4">
+        <div class="card-header"><i class="fas fa-dna"></i><span class="card-category">molecular ops</span></div>
+        <div class="card-title">Interpret a variant report</div>
+        <div class="card-desc">Read a realistic sequencing report, identify a missense variant, and note clinical relevance.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">variant</span><span class="topic-pill">report</span></div><span class="card-number">1.4</span></div>
+      </button>
+    </div>
+  </section>
+
+  <!-- TRACK 2 -->
+  <section class="stage-group">
+    <div class="stage-header">
+      <span class="stage-number">2</span>
+      <h3>Data engineering &amp; analytics</h3>
+      <span class="stage-desc">scripts, tables, and queries you'll ship</span>
+    </div>
+    <div class="card-grid">
+      <button class="destination-card card-informatics" data-modal="m-2-1">
+        <div class="card-header"><i class="fas fa-code"></i><span class="card-category">python/R</span></div>
+        <div class="card-title">Clean &amp; summarize a patient CSV</div>
+        <div class="card-desc">Filter rows, group by disease, and produce a summary table — with a realistic data preview.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">pandas</span><span class="topic-pill">tidyverse</span></div><span class="card-number">2.1</span></div>
+      </button>
+      <button class="destination-card card-informatics" data-modal="m-2-2">
+        <div class="card-header"><i class="fas fa-chart-bar"></i><span class="card-category">stats</span></div>
+        <div class="card-title">Compare two treatment arms</div>
+        <div class="card-desc">Run a t-test, report effect size, and write a one-paragraph results summary.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">t-test</span><span class="topic-pill">effect size</span></div><span class="card-number">2.2</span></div>
+      </button>
+      <button class="destination-card card-informatics" data-modal="m-2-3">
+        <div class="card-header"><i class="fas fa-database"></i><span class="card-category">SQL/EHR</span></div>
+        <div class="card-title">Join patients &amp; labs in SQL</div>
+        <div class="card-desc">Write a JOIN query, preview the result, and export a FHIR-ready payload.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">JOIN</span><span class="topic-pill">FHIR</span></div><span class="card-number">2.3</span></div>
+      </button>
+      <button class="destination-card card-informatics" data-modal="m-2-4">
+        <div class="card-header"><i class="fas fa-sitemap"></i><span class="card-category">algorithms</span></div>
+        <div class="card-title">Trace a graph &amp; choose a data structure</div>
+        <div class="card-desc">Walk a protein-interaction graph, pick BFS vs DFS, and justify the complexity trade-off.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">graph</span><span class="topic-pill">Big-O</span></div><span class="card-number">2.4</span></div>
+      </button>
+    </div>
+  </section>
+
+  <!-- TRACK 3 -->
+  <section class="stage-group">
+    <div class="stage-header">
+      <span class="stage-number">3</span>
+      <h3>AI, clinical systems &amp; translation</h3>
+      <span class="stage-desc">models, alerts, and bench-to-bedside</span>
+    </div>
+    <div class="card-grid">
+      <button class="destination-card card-mixed" data-modal="m-3-1">
+        <div class="card-header"><i class="fas fa-brain"></i><span class="card-category">ML ops</span></div>
+        <div class="card-title">Evaluate a risk model</div>
+        <div class="card-desc">Read a realistic ML dashboard, check ROC-AUC, and decide if the model is deployment-ready.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">ROC</span><span class="topic-pill">calibration</span></div><span class="card-number">3.1</span></div>
+      </button>
+      <button class="destination-card card-mixed" data-modal="m-3-2">
+        <div class="card-header"><i class="fas fa-microscope"></i><span class="card-category">genomics ops</span></div>
+        <div class="card-title">Run a variant-calling pipeline</div>
+        <div class="card-desc">See a realistic pipeline status screen, interpret a VCF record, and flag a clinically relevant hit.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">FASTQ→VCF</span><span class="topic-pill">annotation</span></div><span class="card-number">3.2</span></div>
+      </button>
+      <button class="destination-card card-mixed" data-modal="m-3-3">
+        <div class="card-header"><i class="fas fa-hospital"></i><span class="card-category">clinical systems</span></div>
+        <div class="card-title">Tune a CDS alert</div>
+        <div class="card-desc">Review a realistic alert mockup, reduce noise, and document the design rationale.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">CDS</span><span class="topic-pill">alert fatigue</span></div><span class="card-number">3.3</span></div>
+      </button>
+      <button class="destination-card card-mixed" data-modal="m-3-4">
+        <div class="card-header"><i class="fas fa-flask"></i><span class="card-category">translational</span></div>
+        <div class="card-title">Prepare a pharmacogenomics handoff</div>
+        <div class="card-desc">Read a genotype table, match to CPIC guidance, and draft a clinical note.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">CYP2C19</span><span class="topic-pill">CPIC</span></div><span class="card-number">3.4</span></div>
+      </button>
+    </div>
+  </section>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot dot-bio"></span> Clinical &amp; bench workflows</div>
+    <div class="legend-item"><span class="legend-dot dot-info"></span> Data engineering &amp; analytics</div>
+    <div class="legend-item"><span class="legend-dot dot-mixed"></span> AI, systems &amp; translation</div>
+    <div class="legend-ai"><i class="fas fa-laptop-medical"></i> realistic UI mockups + prompt lab</div>
+  </div>
+</div>
+
+<!-- ==================== MODAL BACKDROP ==================== -->
+<div class="modal-backdrop" id="modal-backdrop">
+
+  <!-- 1.1 Triage a new patient intake -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-1-1" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-bio">Track 1 · Playbook 1.1</span>
+      <h2>Triage a new patient intake</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> ~15 min</span><span><i class="fas fa-user-md"></i> clinical ops</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-bullseye"></i> What you're doing</h3>
+        <p>You receive a new intake record in the EHR. Your job: scan the vitals, flag anything abnormal, and draft a concise triage note for the clinician. This is the most common first task in a clinical informatics or care-coordination role.</p>
+      </div>
+
+      <!-- REALISTIC EHR SCREEN -->
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-desktop"></i> Realistic mockup: EHR intake screen</div>
+        <div class="ui-mockup">
+          <div class="ui-toolbar">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="ui-title">Epic · Patient Intake · MRN 88421</span>
+          </div>
+          <div class="ui-body" style="padding:0;">
+            <div class="ehr-screen">
+              <div class="ehr-sidebar">
+                <div class="nav-item active"><i class="fas fa-user"></i> Summary</div>
+                <div class="nav-item"><i class="fas fa-heartbeat"></i> Vitals</div>
+                <div class="nav-item"><i class="fas fa-flask"></i> Labs</div>
+                <div class="nav-item"><i class="fas fa-pills"></i> Meds</div>
+                <div class="nav-item"><i class="fas fa-notes-medical"></i> Notes</div>
+              </div>
+              <div class="ehr-main">
+                <div class="ehr-header">
+                  <div class="ehr-avatar">JD</div>
+                  <div class="ehr-patient-info"><strong>Jane Doe</strong> · 58F <span>New patient · intake 09:42</span></div>
+                </div>
+                <div class="ehr-vitals">
+                  <div class="ehr-vital"><div class="label">BP</div><div class="value warn">148/92</div></div>
+                  <div class="ehr-vital"><div class="label">HR</div><div class="value">88</div></div>
+                  <div class="ehr-vital"><div class="label">Temp</div><div class="value">37.1°C</div></div>
+                  <div class="ehr-vital"><div class="label">SpO₂</div><div class="value">97%</div></div>
+                  <div class="ehr-vital"><div class="label">Glucose</div><div class="value crit">182</div></div>
+                  <div class="ehr-vital"><div class="label">BMI</div><div class="value">31.4</div></div>
+                </div>
+                <div class="ehr-notes"><strong>Chief complaint:</strong> fatigue, increased thirst. <strong>History:</strong> hypertension, family hx of T2DM. <strong>Plan:</strong> order HbA1c, BMP, lipid panel; follow up in 1 week.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-clipboard-check"></i> Your workflow steps</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> <strong>Scan vitals:</strong> BP 148/92 (stage 1 hypertension) and glucose 182 (high) are the flags.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Cross-check history:</strong> hypertension + family hx of T2DM — consistent with the abnormal values.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Draft note:</strong> "58F, new intake. BP 148/92, glucose 182. Hx HTN, family hx T2DM. Ordered HbA1c, BMP, lipids. Follow-up 1 week."</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Escalate:</strong> flag glucose > 180 for same-day clinician review.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-flask"></i></div><h3>AI Prompt Lab · Triage intake</h3><span class="ai-status">work mode</span></div>
+      <div class="prompt-lab">
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-pen"></i> Draft your work prompt</div>
+            <div class="lab-hint">Ask the AI to draft, summarize, or check your triage note.</div>
+            <textarea class="prompt-textarea" id="prompt-1-1" placeholder="e.g., Draft a triage note for a 58F with BP 148/92, glucose 182, hx hypertension, family hx T2DM…"></textarea>
+            <div class="prompt-chips" data-lesson="1-1">
+              <span class="prompt-chip">Draft a triage note from these vitals</span>
+              <span class="prompt-chip">Which values should I flag first?</span>
+              <span class="prompt-chip">Write a 1-line escalation summary</span>
+            </div>
+            <div class="lab-actions">
+              <button class="lab-btn primary" data-lesson="1-1" data-action="run"><i class="fas fa-play"></i> Run prompt</button>
+              <button class="lab-btn secondary" data-lesson="1-1" data-action="clear"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <div class="prompt-score"><span><i class="fas fa-star"></i> Prompt quality</span><div class="score-bar"><div class="score-fill" id="score-1-1" style="width:0%;"></div></div></div>
+        </div>
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-comment-dots"></i> AI output</div>
+            <div class="response-box" id="response-1-1"><span class="placeholder">Run your prompt to see a draft here…</span></div>
+            <div class="why-box" id="why-1-1" style="display:none;"><strong>Why this works:</strong> <span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.2 Review a lab panel & flag values -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-1-2" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-bio">Track 1 · Playbook 1.2</span>
+      <h2>Review a lab panel &amp; flag values</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> ~10 min</span><span><i class="fas fa-flask"></i> lab ops</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-bullseye"></i> What you're doing</h3>
+        <p>You're reviewing a standard metabolic panel. Scan the dashboard, mark out-of-range values, and prepare a 3-line handoff for the clinician. This is a daily task in lab informatics and care coordination.</p>
+      </div>
+
+      <!-- REALISTIC LAB DASHBOARD -->
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-desktop"></i> Realistic mockup: lab results dashboard</div>
+        <div class="ui-mockup">
+          <div class="ui-toolbar">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="ui-title">Lab Results · MRN 88421 · Collected 08:15</span>
+          </div>
+          <div class="ui-body">
+            <div class="lab-dash">
+              <div class="lab-dash-header">
+                <h4>Metabolic Panel · Jane Doe</h4>
+                <span class="badge">2 critical flags</span>
+              </div>
+              <table class="lab-table">
+                <thead><tr><th>Test</th><th>Result</th><th>Ref range</th><th>Flag</th></tr></thead>
+                <tbody>
+                  <tr><td>Glucose</td><td class="flag-high">182</td><td>70–99</td><td class="flag-high">HIGH</td></tr>
+                  <tr><td>HbA1c</td><td class="flag-high">7.8%</td><td>&lt;5.7%</td><td class="flag-high">HIGH</td></tr>
+                  <tr><td>Sodium</td><td class="flag-ok">139</td><td>135–145</td><td class="flag-ok">OK</td></tr>
+                  <tr><td>Potassium</td><td class="flag-ok">4.1</td><td>3.5–5.1</td><td class="flag-ok">OK</td></tr>
+                  <tr><td>Creatinine</td><td class="flag-warn">1.32</td><td>0.6–1.1</td><td class="flag-warn">HIGH</td></tr>
+                  <tr><td>eGFR</td><td class="flag-warn">58</td><td>&gt;90</td><td class="flag-warn">LOW</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-clipboard-check"></i> Your workflow steps</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> <strong>Flag criticals first:</strong> glucose 182 and HbA1c 7.8% suggest uncontrolled diabetes.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Note second-tier flags:</strong> creatinine 1.32 and eGFR 58 suggest mild renal impairment.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Handoff note:</strong> "Uncontrolled T2DM (A1c 7.8), mild renal impairment (eGFR 58). Recommend endocrine + renal follow-up."</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Document:</strong> add a lab comment so the next reviewer sees your reasoning.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-flask"></i></div><h3>AI Prompt Lab · Lab review</h3><span class="ai-status">work mode</span></div>
+      <div class="prompt-lab">
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-pen"></i> Draft your work prompt</div>
+            <div class="lab-hint">Ask the AI to prioritize flags or draft the handoff.</div>
+            <textarea class="prompt-textarea" id="prompt-1-2" placeholder="e.g., Prioritize these labs for a clinician handoff: glucose 182, A1c 7.8%, creatinine 1.32, eGFR 58…"></textarea>
+            <div class="prompt-chips" data-lesson="1-2">
+              <span class="prompt-chip">Prioritize these lab flags</span>
+              <span class="prompt-chip">Draft a 3-line handoff note</span>
+              <span class="prompt-chip">Explain the renal flags to a non-clinician</span>
+            </div>
+            <div class="lab-actions">
+              <button class="lab-btn primary" data-lesson="1-2" data-action="run"><i class="fas fa-play"></i> Run prompt</button>
+              <button class="lab-btn secondary" data-lesson="1-2" data-action="clear"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <div class="prompt-score"><span><i class="fas fa-star"></i> Prompt quality</span><div class="score-bar"><div class="score-fill" id="score-1-2" style="width:0%;"></div></div></div>
+        </div>
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-comment-dots"></i> AI output</div>
+            <div class="response-box" id="response-1-2"><span class="placeholder">Run your prompt to see a draft here…</span></div>
+            <div class="why-box" id="why-1-2" style="display:none;"><strong>Why this works:</strong> <span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.3 Draft a PK/PD summary from a curve -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-1-3" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-bio">Track 1 · Playbook 1.3</span>
+      <h2>Draft a PK/PD summary from a curve</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> ~15 min</span><span><i class="fas fa-chart-line"></i> research ops</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-bullseye"></i> What you're doing</h3>
+        <p>You're given a drug-concentration–time curve from a PK study. Your job: estimate half-life, compute AUC, and write a short summary for a study memo. This is standard work in clinical pharmacology and translational research.</p>
+      </div>
+
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-chart-line"></i> Realistic mockup: PK curve from a study</div>
+        <div class="graph-wrap">
+          <svg class="graph-svg" viewBox="0 0 520 240" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="520" height="240" fill="white"/>
+            <!-- grid -->
+            <line x1="60" y1="200" x2="500" y2="200" stroke="#e2e8f0" stroke-width="1"/>
+            <line x1="60" y1="20" x2="60" y2="200" stroke="#e2e8f0" stroke-width="1"/>
+            <line x1="60" y1="20" x2="500" y2="20" stroke="#f1f5f9" stroke-width="1"/>
+            <line x1="60" y1="65" x2="500" y2="65" stroke="#f1f5f9" stroke-width="1"/>
+            <line x1="60" y1="110" x2="500" y2="110" stroke="#f1f5f9" stroke-width="1"/>
+            <line x1="60" y1="155" x2="500" y2="155" stroke="#f1f5f9" stroke-width="1"/>
+            <!-- axes labels -->
+            <text x="500" y="220" text-anchor="end" font-size="10" fill="#718096">time (h)</text>
+            <text x="55" y="18" font-size="10" fill="#718096">C (mg/L)</text>
+            <!-- curve -->
+            <path d="M60 30 Q120 45 180 90 Q260 140 340 170 Q420 190 500 196" stroke="#1e4e8c" stroke-width="3" fill="none"/>
+            <path d="M60 30 Q120 45 180 90 Q260 140 340 170 Q420 190 500 196 L500 200 L60 200 Z" fill="#1e4e8c" opacity="0.06"/>
+            <!-- half-life markers -->
+            <line x1="60" y1="30" x2="60" y2="200" stroke="#e53e3e" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+            <line x1="60" y1="30" x2="180" y2="30" stroke="#e53e3e" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+            <line x1="180" y1="30" x2="180" y2="200" stroke="#e53e3e" stroke-width="1" stroke-dasharray="3 3" opacity="0.6"/>
+            <text x="70" y="25" font-size="9" fill="#e53e3e" font-weight="600">C₀</text>
+            <text x="185" y="25" font-size="9" fill="#e53e3e" font-weight="600">t½ ≈ 3.5h</text>
+            <!-- AUC label -->
+            <text x="300" y="120" font-size="10" fill="#1e4e8c" font-weight="600">AUC ≈ 4.8 mg·h/L</text>
+            <text x="300" y="135" font-size="9" fill="#718096">(shaded area)</text>
+            <!-- study details -->
+            <text x="60" y="230" font-size="8" fill="#a0aec0">Study: PK-2024-041 · n=24 · single 500mg dose</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-clipboard-check"></i> Your workflow steps</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> <strong>Read C₀:</strong> peak concentration ~9.8 mg/L (from the curve).</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Estimate half-life:</strong> the red dashed line shows t½ ≈ 3.5 h (time to drop to half of C₀).</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Compute AUC:</strong> shaded area ≈ 4.8 mg·h/L — total exposure.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Write summary:</strong> "Single 500mg dose: C₀ ~9.8 mg/L, t½ ~3.5h, AUC ~4.8 mg·h/L. Consistent with once-daily dosing."</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-flask"></i></div><h3>AI Prompt Lab · PK summary</h3><span class="ai-status">work mode</span></div>
+      <div class="prompt-lab">
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-pen"></i> Draft your work prompt</div>
+            <div class="lab-hint">Ask the AI to compute or summarize the PK parameters.</div>
+            <textarea class="prompt-textarea" id="prompt-1-3" placeholder="e.g., Write a PK summary from C₀=9.8 mg/L, t½=3.5h, AUC=4.8 mg·h/L for a 500mg single dose study…"></textarea>
+            <div class="prompt-chips" data-lesson="1-3">
+              <span class="prompt-chip">Compute half-life from C₀=9.8 and k=0.20</span>
+              <span class="prompt-chip">Draft a 3-line PK memo summary</span>
+              <span class="prompt-chip">Check if once-daily dosing is reasonable</span>
+            </div>
+            <div class="lab-actions">
+              <button class="lab-btn primary" data-lesson="1-3" data-action="run"><i class="fas fa-play"></i> Run prompt</button>
+              <button class="lab-btn secondary" data-lesson="1-3" data-action="clear"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <div class="prompt-score"><span><i class="fas fa-star"></i> Prompt quality</span><div class="score-bar"><div class="score-fill" id="score-1-3" style="width:0%;"></div></div></div>
+        </div>
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-comment-dots"></i> AI output</div>
+            <div class="response-box" id="response-1-3"><span class="placeholder">Run your prompt to see a draft here…</span></div>
+            <div class="why-box" id="why-1-3" style="display:none;"><strong>Why this works:</strong> <span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1.4 Interpret a variant report -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-1-4" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-bio">Track 1 · Playbook 1.4</span>
+      <h2>Interpret a variant report</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> ~15 min</span><span><i class="fas fa-dna"></i> molecular ops</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-bullseye"></i> What you're doing</h3>
+        <p>You receive a sequencing report from the lab. Your job: read the variant record, identify whether it's clinically relevant, and draft a note for the ordering clinician.</p>
+      </div>
+
+      <!-- REALISTIC SEQUENCING REPORT -->
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-desktop"></i> Realistic mockup: sequencing report excerpt</div>
+        <div class="seq-report">
+          <div class="seq-header">
+            <span><i class="fas fa-dna"></i> Genomic Report · Sample GS-88421</span>
+            <strong>1 actionable variant</strong>
+          </div>
+          <div class="seq-body">
+<span class="comment">## Sample: GS-88421 · Panel: Hereditary Cancer (84 genes)</span>
+<span class="comment">## Pipeline: FASTQ → BWA-MEM → GATK → VEP v110</span>
+
+<span class="gene">Gene:</span> <span class="gene">BRCA1</span>
+<span class="gene">Variant:</span> c.5266dupC (p.Gln1756Profs*74)
+<span class="gene">Type:</span> frameshift insertion
+<span class="gene">Zygosity:</span> heterozygous
+<span class="gene">ClinVar:</span> <span class="var">Pathogenic</span>
+<span class="gene">Consequence:</span> premature stop codon → loss of function
+<span class="gene">Coverage:</span> DP=142, VAF=0.51
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-clipboard-check"></i> Your workflow steps</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> <strong>Read the record:</strong> BRCA1 frameshift, heterozygous, ClinVar Pathogenic, DP=142 (high confidence).</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Assess relevance:</strong> loss-of-function BRCA1 variant → elevated hereditary breast/ovarian cancer risk.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Draft note:</strong> "Pathogenic BRCA1 frameshift (c.5266dupC). Heterozygous, high coverage. Recommend genetic counseling and enhanced screening."</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Escalate:</strong> flag for genetic counselor within 48h.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-flask"></i></div><h3>AI Prompt Lab · Variant report</h3><span class="ai-status">work mode</span></div>
+      <div class="prompt-lab">
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-pen"></i> Draft your work prompt</div>
+            <div class="lab-hint">Ask the AI to interpret or summarize the variant.</div>
+            <textarea class="prompt-textarea" id="prompt-1-4" placeholder="e.g., Summarize this variant for a clinician: BRCA1 c.5266dupC, heterozygous, ClinVar Pathogenic, DP=142…"></textarea>
+            <div class="prompt-chips" data-lesson="1-4">
+              <span class="prompt-chip">Summarize this BRCA1 variant for a clinician</span>
+              <span class="prompt-chip">What does DP=142 and VAF=0.51 mean?</span>
+              <span class="prompt-chip">Draft a genetic counseling referral note</span>
+            </div>
+            <div class="lab-actions">
+              <button class="lab-btn primary" data-lesson="1-4" data-action="run"><i class="fas fa-play"></i> Run prompt</button>
+              <button class="lab-btn secondary" data-lesson="1-4" data-action="clear"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <div class="prompt-score"><span><i class="fas fa-star"></i> Prompt quality</span><div class="score-bar"><div class="score-fill" id="score-1-4" style="width:0%;"></div></div></div>
+        </div>
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-comment-dots"></i> AI output</div>
+            <div class="response-box" id="response-1-4"><span class="placeholder">Run your prompt to see a draft here…</span></div>
+            <div class="why-box" id="why-1-4" style="display:none;"><strong>Why this works:</strong> <span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.1 Clean & summarize a patient CSV -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-2-1" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-informatics">Track 2 · Playbook 2.1</span>
+      <h2>Clean &amp; summarize a patient CSV</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> ~20 min</span><span><i class="fas fa-code"></i> python/R</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-bullseye"></i> What you're doing</h3>
+        <p>You receive a raw patient CSV. Your job: filter to relevant rows, group by disease, and produce a summary table. This is the most common first coding task in any biomedical data role.</p>
+      </div>
+
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-table"></i> Realistic mockup: raw patient CSV preview</div>
+        <div class="ui-mockup">
+          <div class="ui-toolbar">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="ui-title">patients_raw.csv · 5,240 rows · 14 columns</span>
+          </div>
+          <div class="ui-body" style="padding:0;">
+            <table class="data-table" style="border-radius:0;border:none;">
+              <thead><tr><th>patient_id</th><th>age</th><th>sex</th><th>disease</th><th>biomarker</th><th>visit_date</th></tr></thead>
+              <tbody>
+                <tr><td>P001</td><td>72</td><td>F</td><td>Type 2 Diabetes</td><td>8.4</td><td>2024-03-12</td></tr>
+                <tr><td>P002</td><td>65</td><td>M</td><td>Type 2 Diabetes</td><td>7.9</td><td>2024-03-14</td></tr>
+                <tr><td>P003</td><td>45</td><td>F</td><td>Hypertension</td><td>5.1</td><td>2024-03-15</td></tr>
+                <tr><td>P004</td><td>68</td><td>M</td><td>Type 2 Diabetes</td><td>8.1</td><td>2024-03-18</td></tr>
+                <tr><td>P005</td><td>52</td><td>F</td><td>Hypertension</td><td>5.4</td><td>2024-03-20</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-columns"></i> Realistic mockup: output code (Python + R side-by-side)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;">
+          <div>
+            <div style="font-size:.72rem;font-weight:700;color:#1e4e8c;margin-bottom:.35rem;">Python · pandas</div>
+            <div class="code-sample">
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+df = pd.read_csv(<span class="str">"patients_raw.csv"</span>)
+
+older = df[df.age &gt; <span class="num">60</span>]
+summary = older.groupby(<span class="str">"disease"</span>)[<span class="str">"biomarker"</span>].mean()
+<span class="fn">print</span>(summary)
+            </div>
+          </div>
+          <div>
+            <div style="font-size:.72rem;font-weight:700;color:#2f855a;margin-bottom:.35rem;">R · tidyverse</div>
+            <div class="code-sample">
+<span class="kw">library</span>(tidyverse)
+df &lt;- read_csv(<span class="str">"patients_raw.csv"</span>)
+
+df %&gt;%
+  <span class="fn">filter</span>(age &gt; <span class="num">60</span>) %&gt;%
+  <span class="fn">group_by</span>(disease) %&gt;%
+  <span class="fn">summarise</span>(mean_bm = <span class="fn">mean</span>(biomarker))
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-clipboard-check"></i> Your workflow steps</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> <strong>Load:</strong> read the CSV with pandas or readr.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Filter:</strong> keep age &gt; 60 (the study cohort).</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Group &amp; summarize:</strong> mean biomarker per disease.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Output:</strong> diabetes ≈ 8.13, hypertension ≈ 5.25 — ready for the report.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-flask"></i></div><h3>AI Prompt Lab · Data cleaning</h3><span class="ai-status">work mode</span></div>
+      <div class="prompt-lab">
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-pen"></i> Draft your work prompt</div>
+            <div class="lab-hint">Ask the AI to write or debug your data script.</div>
+            <textarea class="prompt-textarea" id="prompt-2-1" placeholder="e.g., Write a pandas script that filters age > 60 and groups biomarker mean by disease…"></textarea>
+            <div class="prompt-chips" data-lesson="2-1">
+              <span class="prompt-chip">Translate this pandas code to tidyverse</span>
+              <span class="prompt-chip">Add a row-count check before and after filtering</span>
+              <span class="prompt-chip">Write a data-quality summary for this CSV</span>
+            </div>
+            <div class="lab-actions">
+              <button class="lab-btn primary" data-lesson="2-1" data-action="run"><i class="fas fa-play"></i> Run prompt</button>
+              <button class="lab-btn secondary" data-lesson="2-1" data-action="clear"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <div class="prompt-score"><span><i class="fas fa-star"></i> Prompt quality</span><div class="score-bar"><div class="score-fill" id="score-2-1" style="width:0%;"></div></div></div>
+        </div>
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-comment-dots"></i> AI output</div>
+            <div class="response-box" id="response-2-1"><span class="placeholder">Run your prompt to see a draft here…</span></div>
+            <div class="why-box" id="why-2-1" style="display:none;"><strong>Why this works:</strong> <span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.2 Compare two treatment arms -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-2-2" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-informatics">Track 2 · Playbook 2.2</span>
+      <h2>Compare two treatment arms</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> ~15 min</span><span><i class="fas fa-chart-bar"></i> stats</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-bullseye"></i> What you're doing</h3>
+        <p>You have biomarker data from two treatment arms. Your job: run a t-test, compute effect size, and write a one-paragraph results summary for a study memo.</p>
+      </div>
+
+      <!-- REALISTIC STATS DASHBOARD -->
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-desktop"></i> Realistic mockup: stats output panel</div>
+        <div class="ui-mockup">
+          <div class="ui-toolbar">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="ui-title">Study STAT-241 · Biomarker comparison · n=30/arm</span>
+          </div>
+          <div class="ui-body">
+            <div class="lab-dash">
+              <div class="lab-dash-header"><h4>Treatment A vs Control</h4><span class="badge" style="background:#c6f6d5;color:#22543d;">p = 0.03</span></div>
+              <table class="lab-table">
+                <thead><tr><th>Group</th><th>Mean</th><th>SD</th><th>n</th></tr></thead>
+                <tbody>
+                  <tr><td>Control</td><td>4.0</td><td>1.8</td><td>30</td></tr>
+                  <tr><td>Treatment A</td><td>6.0</td><td>2.1</td><td>30</td></tr>
+                </tbody>
+              </table>
+              <div style="margin-top:.6rem;font-size:.72rem;color:#4a5568;display:flex;gap:1rem;flex-wrap:wrap;">
+                <span><strong>t = 2.25</strong></span>
+                <span><strong>p = 0.03</strong></span>
+                <span><strong>Cohen's d = 0.58</strong> (medium)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-clipboard-check"></i> Your workflow steps</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> <strong>Check assumptions:</strong> continuous outcome, ~normal, n=30/arm.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Run t-test:</strong> t=2.25, p=0.03 — statistically significant at α=0.05.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Effect size:</strong> Cohen's d=0.58 (medium) — clinically meaningful, not just significant.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Write summary:</strong> "Treatment A raised biomarker from 4.0 to 6.0 (d=0.58, p=0.03). Medium effect; consider replication in larger cohort."</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-flask"></i></div><h3>AI Prompt Lab · Stats summary</h3><span class="ai-status">work mode</span></div>
+      <div class="prompt-lab">
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-pen"></i> Draft your work prompt</div>
+            <div class="lab-hint">Ask the AI to interpret or summarize the stats.</div>
+            <textarea class="prompt-textarea" id="prompt-2-2" placeholder="e.g., Write a results paragraph from t=2.25, p=0.03, d=0.58, mean 4.0 vs 6.0, n=30/arm…"></textarea>
+            <div class="prompt-chips" data-lesson="2-2">
+              <span class="prompt-chip">Write a 1-paragraph results summary</span>
+              <span class="prompt-chip">Is d=0.58 clinically meaningful?</span>
+              <span class="prompt-chip">Check my t-test assumptions</span>
+            </div>
+            <div class="lab-actions">
+              <button class="lab-btn primary" data-lesson="2-2" data-action="run"><i class="fas fa-play"></i> Run prompt</button>
+              <button class="lab-btn secondary" data-lesson="2-2" data-action="clear"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <div class="prompt-score"><span><i class="fas fa-star"></i> Prompt quality</span><div class="score-bar"><div class="score-fill" id="score-2-2" style="width:0%;"></div></div></div>
+        </div>
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-comment-dots"></i> AI output</div>
+            <div class="response-box" id="response-2-2"><span class="placeholder">Run your prompt to see a draft here…</span></div>
+            <div class="why-box" id="why-2-2" style="display:none;"><strong>Why this works:</strong> <span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.3 Join patients & labs in SQL -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-2-3" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-informatics">Track 2 · Playbook 2.3</span>
+      <h2>Join patients &amp; labs in SQL</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> ~20 min</span><span><i class="fas fa-database"></i> SQL/EHR</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-bullseye"></i> What you're doing</h3>
+        <p>You need a combined view of patients and their lab results. Your job: write the JOIN query, preview the output, and export a FHIR-ready payload for downstream use.</p>
+      </div>
+
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-table"></i> Realistic mockup: source tables + JOIN result</div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:stretch;">
+          <div style="flex:1;min-width:160px;">
+            <div style="font-size:.7rem;font-weight:700;color:#1e4e8c;margin-bottom:.3rem;">patients</div>
+            <table class="data-table"><thead><tr><th>id</th><th>name</th><th>dob</th></tr></thead><tbody><tr><td>1</td><td>Ana</td><td>1962-04-11</td></tr><tr><td>2</td><td>Ben</td><td>1970-09-02</td></tr></tbody></table>
+          </div>
+          <div style="flex:1;min-width:160px;">
+            <div style="font-size:.7rem;font-weight:700;color:#2f855a;margin-bottom:.3rem;">labs</div>
+            <table class="data-table"><thead><tr><th>patient_id</th><th>test</th><th>value</th></tr></thead><tbody><tr><td>1</td><td>HbA1c</td><td>7.2</td></tr><tr><td>2</td><td>HbA1c</td><td>6.1</td></tr></tbody></table>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:1.2rem;color:#6b46c1;margin:.5rem 0;"><i class="fas fa-arrow-down"></i></div>
+        <div style="background:white;border-radius:.75rem;padding:.6rem;border:2px solid #6b46c1;">
+          <div style="font-size:.7rem;font-weight:700;color:#6b46c1;margin-bottom:.3rem;">JOIN result</div>
+          <table class="data-table"><thead><tr><th>name</th><th>test</th><th>value</th></tr></thead><tbody><tr><td>Ana</td><td>HbA1c</td><td>7.2</td></tr><tr><td>Ben</td><td>HbA1c</td><td>6.1</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-code"></i> Realistic mockup: FHIR-ready payload</div>
+        <div class="fhir-resource">
+{
+  <span class="key">"resourceType"</span>: <span class="str">"Observation"</span>,
+  <span class="key">"code"</span>: { <span class="key">"coding"</span>: [{
+    <span class="key">"system"</span>: <span class="str">"http://loinc.org"</span>,
+    <span class="key">"code"</span>: <span class="str">"4548-4"</span>,
+    <span class="key">"display"</span>: <span class="str">"HbA1c"</span>
+  }]},
+  <span class="key">"subject"</span>: { <span class="key">"reference"</span>: <span class="str">"Patient/1"</span> },
+  <span class="key">"valueQuantity"</span>: { <span class="key">"value"</span>: <span class="num">7.2</span>, <span class="key">"unit"</span>: <span class="str">"%"</span> }
+}
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-clipboard-check"></i> Your workflow steps</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> <strong>Write query:</strong> <code>SELECT p.name, l.test, l.value FROM patients p JOIN labs l ON p.id = l.patient_id WHERE l.test = 'HbA1c';</code></li>
+          <li><i class="fas fa-check-circle"></i> <strong>Preview:</strong> verify row counts and no duplicated rows.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Map to FHIR:</strong> wrap each result as an Observation resource with LOINC code and Patient reference.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Export:</strong> hand off the payload to the integration team.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-flask"></i></div><h3>AI Prompt Lab · SQL &amp; FHIR</h3><span class="ai-status">work mode</span></div>
+      <div class="prompt-lab">
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-pen"></i> Draft your work prompt</div>
+            <div class="lab-hint">Ask the AI to write the query or the FHIR mapping.</div>
+            <textarea class="prompt-textarea" id="prompt-2-3" placeholder="e.g., Write a SQL query joining patients and labs on patient_id, filtered to HbA1c…"></textarea>
+            <div class="prompt-chips" data-lesson="2-3">
+              <span class="prompt-chip">Write the SQL JOIN query for HbA1c</span>
+              <span class="prompt-chip">Map this result to a FHIR Observation</span>
+              <span class="prompt-chip">Check for duplicate rows after the JOIN</span>
+            </div>
+            <div class="lab-actions">
+              <button class="lab-btn primary" data-lesson="2-3" data-action="run"><i class="fas fa-play"></i> Run prompt</button>
+              <button class="lab-btn secondary" data-lesson="2-3" data-action="clear"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <div class="prompt-score"><span><i class="fas fa-star"></i> Prompt quality</span><div class="score-bar"><div class="score-fill" id="score-2-3" style="width:0%;"></div></div></div>
+        </div>
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-comment-dots"></i> AI output</div>
+            <div class="response-box" id="response-2-3"><span class="placeholder">Run your prompt to see a draft here…</span></div>
+            <div class="why-box" id="why-2-3" style="display:none;"><strong>Why this works:</strong> <span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2.4 Trace a graph & choose a data structure -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-2-4" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-informatics">Track 2 · Playbook 2.4</span>
+      <h2>Trace a graph &amp; choose a data structure</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> ~15 min</span><span><i class="fas fa-sitemap"></i> algorithms</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-bullseye"></i> What you're doing</h3>
+        <p>You're analyzing a protein-interaction network. Your job: choose BFS vs DFS for the task, trace the traversal, and justify the complexity trade-off in a short design note.</p>
+      </div>
+
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-project-diagram"></i> Realistic mockup: protein-interaction network</div>
+        <div style="background:white;border-radius:.75rem;padding:.5rem;border:1px solid #dbe2ea;text-align:center;">
+          <svg viewBox="0 0 460 220" style="max-width:100%;height:auto;">
+            <line x1="120" y1="110" x2="220" y2="70" stroke="#cbd5e0" stroke-width="2"/>
+            <line x1="120" y1="110" x2="220" y2="150" stroke="#cbd5e0" stroke-width="2"/>
+            <line x1="220" y1="70" x2="320" y2="110" stroke="#cbd5e0" stroke-width="2"/>
+            <line x1="220" y1="150" x2="320" y2="110" stroke="#cbd5e0" stroke-width="2"/>
+            <line x1="220" y1="70" x2="220" y2="150" stroke="#cbd5e0" stroke-width="2"/>
+            <line x1="320" y1="110" x2="380" y2="170" stroke="#cbd5e0" stroke-width="2"/>
+            <line x1="320" y1="110" x2="420" y2="90" stroke="#cbd5e0" stroke-width="2"/>
+            <circle cx="120" cy="110" r="16" fill="#1e4e8c"/><text x="120" y="114" text-anchor="middle" font-size="9" fill="white" font-weight="700">A</text>
+            <circle cx="220" cy="70" r="16" fill="#2b6cb0"/><text x="220" y="74" text-anchor="middle" font-size="9" fill="white" font-weight="700">B</text>
+            <circle cx="220" cy="150" r="16" fill="#2b6cb0"/><text x="220" y="154" text-anchor="middle" font-size="9" fill="white" font-weight="700">C</text>
+            <circle cx="320" cy="110" r="16" fill="#2f855a"/><text x="320" y="114" text-anchor="middle" font-size="9" fill="white" font-weight="700">D</text>
+            <circle cx="380" cy="170" r="14" fill="#b7791f"/><text x="380" y="174" text-anchor="middle" font-size="8" fill="white" font-weight="700">E</text>
+            <circle cx="420" cy="90" r="14" fill="#b7791f"/><text x="420" y="94" text-anchor="middle" font-size="8" fill="white" font-weight="700">F</text>
+          </svg>
+          <div style="font-size:.72rem;color:#718096;margin-top:.3rem;">BFS from A: B,C (dist 1) → D (dist 2) → E,F (dist 3). DFS from A: A→B→D→E→F→C.</div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-clipboard-check"></i> Your workflow steps</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> <strong>Define the task:</strong> "find shortest paths from A" → BFS; "check connectivity/cycles" → DFS.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Choose the structure:</strong> adjacency list (sparse graph, O(V+E) memory).</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Trace BFS:</strong> queue = [A] → visit B,C → visit D → visit E,F. Order: A,B,C,D,E,F.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Justify:</strong> BFS O(V+E) gives shortest paths in unweighted graphs — the right choice for interaction distance.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-flask"></i></div><h3>AI Prompt Lab · Graph design note</h3><span class="ai-status">work mode</span></div>
+      <div class="prompt-lab">
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-pen"></i> Draft your work prompt</div>
+            <div class="lab-hint">Ask the AI to trace the graph or justify the algorithm choice.</div>
+            <textarea class="prompt-textarea" id="prompt-2-4" placeholder="e.g., Trace BFS from A on this protein network and justify adjacency list vs matrix…"></textarea>
+            <div class="prompt-chips" data-lesson="2-4">
+              <span class="prompt-chip">Trace BFS from node A</span>
+              <span class="prompt-chip">BFS vs DFS for shortest paths</span>
+              <span class="prompt-chip">Justify adjacency list vs matrix</span>
+            </div>
+            <div class="lab-actions">
+              <button class="lab-btn primary" data-lesson="2-4" data-action="run"><i class="fas fa-play"></i> Run prompt</button>
+              <button class="lab-btn secondary" data-lesson="2-4" data-action="clear"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <div class="prompt-score"><span><i class="fas fa-star"></i> Prompt quality</span><div class="score-bar"><div class="score-fill" id="score-2-4" style="width:0%;"></div></div></div>
+        </div>
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-comment-dots"></i> AI output</div>
+            <div class="response-box" id="response-2-4"><span class="placeholder">Run your prompt to see a draft here…</span></div>
+            <div class="why-box" id="why-2-4" style="display:none;"><strong>Why this works:</strong> <span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.1 Evaluate a risk model -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-3-1" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-mixed">Track 3 · Playbook 3.1</span>
+      <h2>Evaluate a risk model</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> ~15 min</span><span><i class="fas fa-brain"></i> ML ops</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-bullseye"></i> What you're doing</h3>
+        <p>You're reviewing a sepsis risk model before deployment. Your job: read the ML dashboard, check ROC-AUC and calibration, and write a go/no-go recommendation.</p>
+      </div>
+
+      <!-- REALISTIC ML DASHBOARD -->
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-desktop"></i> Realistic mockup: ML evaluation dashboard</div>
+        <div class="ui-mockup">
+          <div class="ui-toolbar">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="ui-title">Model: SepsisRisk v2.1 · validation set n=4,120</span>
+          </div>
+          <div class="ui-body">
+            <div class="ml-dash">
+              <div class="ml-metrics">
+                <div class="ml-metric"><div class="label">ROC-AUC</div><div class="value good">0.85</div><div class="sub">good discrimination</div></div>
+                <div class="ml-metric"><div class="label">Sensitivity</div><div class="value good">0.80</div><div class="sub">at chosen threshold</div></div>
+                <div class="ml-metric"><div class="label">Specificity</div><div class="value good">0.80</div><div class="sub">at chosen threshold</div></div>
+                <div class="ml-metric"><div class="label">Calibration</div><div class="value warn">0.12</div><div class="sub">Brier score (borderline)</div></div>
+              </div>
+              <div style="background:white;border:1px solid #e2e8f0;border-radius:.5rem;padding:.6rem;">
+                <div style="font-size:.68rem;color:#718096;margin-bottom:.3rem;">Subgroup performance</div>
+                <table class="lab-table">
+                  <thead><tr><th>Subgroup</th><th>AUC</th><th>Calibration</th></tr></thead>
+                  <tbody>
+                    <tr><td>Age &lt; 65</td><td class="flag-ok">0.87</td><td class="flag-ok">0.09</td></tr>
+                    <tr><td>Age ≥ 65</td><td class="flag-warn">0.78</td><td class="flag-warn">0.16</td></tr>
+                    <tr><td>Female</td><td class="flag-ok">0.86</td><td class="flag-ok">0.10</td></tr>
+                    <tr><td>Male</td><td class="flag-ok">0.84</td><td class="flag-ok">0.11</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-clipboard-check"></i> Your workflow steps</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> <strong>Check discrimination:</strong> AUC 0.85 overall — good.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Check calibration:</strong> Brier 0.12 is borderline — predicted probabilities slightly off.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Check subgroups:</strong> age ≥ 65 AUC drops to 0.78 and calibration worsens — potential bias.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Recommendation:</strong> "Conditional go. Improve calibration for age ≥ 65 before broad deployment; monitor subgroup drift."</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-flask"></i></div><h3>AI Prompt Lab · Model review</h3><span class="ai-status">work mode</span></div>
+      <div class="prompt-lab">
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-pen"></i> Draft your work prompt</div>
+            <div class="lab-hint">Ask the AI to draft the go/no-go or audit the metrics.</div>
+            <textarea class="prompt-textarea" id="prompt-3-1" placeholder="e.g., Draft a go/no-go recommendation from AUC 0.85, calibration 0.12, age≥65 AUC 0.78…"></textarea>
+            <div class="prompt-chips" data-lesson="3-1">
+              <span class="prompt-chip">Draft a go/no-go recommendation</span>
+              <span class="prompt-chip">Is 0.12 Brier score acceptable?</span>
+              <span class="prompt-chip">Flag potential subgroup bias</span>
+            </div>
+            <div class="lab-actions">
+              <button class="lab-btn primary" data-lesson="3-1" data-action="run"><i class="fas fa-play"></i> Run prompt</button>
+              <button class="lab-btn secondary" data-lesson="3-1" data-action="clear"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <div class="prompt-score"><span><i class="fas fa-star"></i> Prompt quality</span><div class="score-bar"><div class="score-fill" id="score-3-1" style="width:0%;"></div></div></div>
+        </div>
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-comment-dots"></i> AI output</div>
+            <div class="response-box" id="response-3-1"><span class="placeholder">Run your prompt to see a draft here…</span></div>
+            <div class="why-box" id="why-3-1" style="display:none;"><strong>Why this works:</strong> <span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.2 Run a variant-calling pipeline -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-3-2" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-mixed">Track 3 · Playbook 3.2</span>
+      <h2>Run a variant-calling pipeline</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> ~20 min</span><span><i class="fas fa-microscope"></i> genomics ops</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-bullseye"></i> What you're doing</h3>
+        <p>You're monitoring a variant-calling run. Your job: check the pipeline status, inspect the VCF output, and flag any clinically relevant hits for review.</p>
+      </div>
+
+      <!-- REALISTIC PIPELINE STATUS SCREEN -->
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-desktop"></i> Realistic mockup: pipeline status screen</div>
+        <div class="ui-mockup">
+          <div class="ui-toolbar">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="ui-title">Run 2024-0412-A · Sample GS-88421 · WGS</span>
+          </div>
+          <div class="ui-body">
+            <div style="display:flex;flex-direction:column;gap:.4rem;font-size:.72rem;">
+              <div style="display:flex;justify-content:space-between;padding:.35rem .5rem;background:#c6f6d5;border-radius:.4rem;"><span><i class="fas fa-check-circle" style="color:#2f855a;"></i> FASTQ QC</span><span style="color:#276749;font-weight:600;">passed · 32M reads</span></div>
+              <div style="display:flex;justify-content:space-between;padding:.35rem .5rem;background:#c6f6d5;border-radius:.4rem;"><span><i class="fas fa-check-circle" style="color:#2f855a;"></i> Alignment (BWA-MEM)</span><span style="color:#276749;font-weight:600;">99.2% mapped</span></div>
+              <div style="display:flex;justify-content:space-between;padding:.35rem .5rem;background:#c6f6d5;border-radius:.4rem;"><span><i class="fas fa-check-circle" style="color:#2f855a;"></i> Variant calling (GATK)</span><span style="color:#276749;font-weight:600;">142,318 variants</span></div>
+              <div style="display:flex;justify-content:space-between;padding:.35rem .5rem;background:#fefcbf;border-radius:.4rem;"><span><i class="fas fa-clock" style="color:#b7791f;"></i> Annotation (VEP)</span><span style="color:#975a16;font-weight:600;">running…</span></div>
+              <div style="display:flex;justify-content:space-between;padding:.35rem .5rem;background:#edf2f7;border-radius:.4rem;"><span><i class="fas fa-hourglass-half" style="color:#718096;"></i> Clinical report</span><span style="color:#718096;font-weight:600;">queued</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-code"></i> Realistic mockup: VCF output excerpt</div>
+        <div class="fhir-resource">
+<span class="comment">##fileformat=VCFv4.2</span>
+<span class="comment">#CHROM  POS        ID   REF  ALT  QUAL  FILTER  INFO</span>
+chr7    <span class="num">117548628</span>  .    G    A    <span class="num">210</span>   PASS    <span class="str">DP=42;AF=0.48</span>
+chr13   <span class="num">32914438</span>   .    C    T    <span class="num">188</span>   PASS    <span class="str">DP=38;AF=0.51</span>
+chr17   <span class="num">41246481</span>   .    A    G    <span class="num">95</span>    PASS    <span class="str">DP=12;AF=0.22</span>
+<span class="comment"># → chr17 hit: low coverage (DP=12), flag for review</span>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-clipboard-check"></i> Your workflow steps</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> <strong>Check pipeline:</strong> QC and alignment passed; annotation running.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Inspect VCF:</strong> chr7 and chr13 hits look solid (DP &gt; 38).</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Flag low-coverage hit:</strong> chr17 DP=12 is below reliable threshold — needs orthogonal confirmation.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Write note:</strong> "Two high-confidence variants; one low-coverage hit on chr17 flagged for Sanger confirmation."</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-flask"></i></div><h3>AI Prompt Lab · Pipeline review</h3><span class="ai-status">work mode</span></div>
+      <div class="prompt-lab">
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-pen"></i> Draft your work prompt</div>
+            <div class="lab-hint">Ask the AI to review the VCF or draft the QC note.</div>
+            <textarea class="prompt-textarea" id="prompt-3-2" placeholder="e.g., Review this VCF and flag low-coverage variants: chr7 DP=42, chr13 DP=38, chr17 DP=12…"></textarea>
+            <div class="prompt-chips" data-lesson="3-2">
+              <span class="prompt-chip">Flag low-coverage variants</span>
+              <span class="prompt-chip">Draft a QC summary for this run</span>
+              <span class="prompt-chip">Explain DP and AF in the VCF</span>
+            </div>
+            <div class="lab-actions">
+              <button class="lab-btn primary" data-lesson="3-2" data-action="run"><i class="fas fa-play"></i> Run prompt</button>
+              <button class="lab-btn secondary" data-lesson="3-2" data-action="clear"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <div class="prompt-score"><span><i class="fas fa-star"></i> Prompt quality</span><div class="score-bar"><div class="score-fill" id="score-3-2" style="width:0%;"></div></div></div>
+        </div>
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-comment-dots"></i> AI output</div>
+            <div class="response-box" id="response-3-2"><span class="placeholder">Run your prompt to see a draft here…</span></div>
+            <div class="why-box" id="why-3-2" style="display:none;"><strong>Why this works:</strong> <span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.3 Tune a CDS alert -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-3-3" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-mixed">Track 3 · Playbook 3.3</span>
+      <h2>Tune a CDS alert</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> ~15 min</span><span><i class="fas fa-bell"></i> clinical systems</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-bullseye"></i> What you're doing</h3>
+        <p>A CDS alert is firing too often and causing alert fatigue. Your job: review the alert, propose a tuning change, and document the rationale for the clinical governance committee.</p>
+      </div>
+
+      <!-- REALISTIC CDS ALERT MOCKUP -->
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-desktop"></i> Realistic mockup: CDS alert in EHR</div>
+        <div class="ui-mockup">
+          <div class="ui-toolbar">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="ui-title">EHR · Medication Order · MRN 88421</span>
+          </div>
+          <div class="ui-body">
+            <div class="cds-alert">
+              <div class="alert-header"><i class="fas fa-exclamation-triangle"></i> Drug interaction: Warfarin + NSAID</div>
+              <div class="alert-body">Patient is on <strong>warfarin</strong> (INR 2.4). New order for <strong>ibuprofen 400mg</strong> may increase bleeding risk. Consider acetaminophen or GI protection.</div>
+              <div class="alert-actions">
+                <span class="alert-btn primary">Change order</span>
+                <span class="alert-btn secondary">Override with reason</span>
+                <span class="alert-btn secondary">Dismiss</span>
+              </div>
+              <div style="margin-top:.5rem;font-size:.65rem;color:#a0aec0;"><i class="fas fa-info-circle"></i> Alert fired 42 times today · 38 dismissed · 4 acted on</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-clipboard-check"></i> Your workflow steps</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> <strong>Measure alert burden:</strong> 42 fires/day, 38 dismissed (90% dismissal rate) — classic alert fatigue.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Identify tuning options:</strong> restrict to INR &gt; 3.0, or only fire for high-dose NSAIDs, or suppress if GI protection already ordered.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Propose change:</strong> "Suppress alert when INR &lt; 3.0 and GI protection is ordered."</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Document rationale:</strong> expected 60% reduction in fires with no increase in adverse events (based on local data).</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-flask"></i></div><h3>AI Prompt Lab · CDS tuning</h3><span class="ai-status">work mode</span></div>
+      <div class="prompt-lab">
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-pen"></i> Draft your work prompt</div>
+            <div class="lab-hint">Ask the AI to propose tuning logic or write the governance note.</div>
+            <textarea class="prompt-textarea" id="prompt-3-3" placeholder="e.g., Propose tuning logic for a warfarin+NSAID alert firing 42x/day with 90% dismissal rate…"></textarea>
+            <div class="prompt-chips" data-lesson="3-3">
+              <span class="prompt-chip">Propose tuning logic for this alert</span>
+              <span class="prompt-chip">Write a governance committee note</span>
+              <span class="prompt-chip">Estimate the impact of suppression rules</span>
+            </div>
+            <div class="lab-actions">
+              <button class="lab-btn primary" data-lesson="3-3" data-action="run"><i class="fas fa-play"></i> Run prompt</button>
+              <button class="lab-btn secondary" data-lesson="3-3" data-action="clear"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <div class="prompt-score"><span><i class="fas fa-star"></i> Prompt quality</span><div class="score-bar"><div class="score-fill" id="score-3-3" style="width:0%;"></div></div></div>
+        </div>
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-comment-dots"></i> AI output</div>
+            <div class="response-box" id="response-3-3"><span class="placeholder">Run your prompt to see a draft here…</span></div>
+            <div class="why-box" id="why-3-3" style="display:none;"><strong>Why this works:</strong> <span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.4 Prepare a pharmacogenomics handoff -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-3-4" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-mixed">Track 3 · Playbook 3.4</span>
+      <h2>Prepare a pharmacogenomics handoff</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> ~15 min</span><span><i class="fas fa-flask"></i> translational</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-bullseye"></i> What you're doing</h3>
+        <p>A patient's genotype result is back. Your job: match it to CPIC guidance, draft a clinical note, and flag the prescribing recommendation for the care team.</p>
+      </div>
+
+      <div class="visual-block">
+        <div class="visual-title"><i class="fas fa-table"></i> Realistic mockup: genotype + CPIC table</div>
+        <div class="ui-mockup">
+          <div class="ui-toolbar">
+            <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+            <span class="ui-title">PGx Result · MRN 88421 · CYP2C19</span>
+          </div>
+          <div class="ui-body">
+            <table class="lab-table">
+              <thead><tr><th>Genotype</th><th>Phenotype</th><th>CPIC recommendation</th><th>Strength</th></tr></thead>
+              <tbody>
+                <tr><td>*1/*1</td><td>Normal metabolizer</td><td>Standard dosing</td><td class="flag-ok">Strong</td></tr>
+                <tr><td>*1/*2</td><td>Intermediate</td><td>Consider alternative</td><td class="flag-warn">Moderate</td></tr>
+                <tr style="background:#fefcbf;"><td><strong>*2/*2</strong></td><td><strong>Poor metabolizer</strong></td><td><strong>Use alternative antiplatelet</strong></td><td class="flag-high">Strong</td></tr>
+                <tr><td>*2/*17</td><td>Intermediate</td><td>Consider alternative</td><td class="flag-warn">Moderate</td></tr>
+              </tbody>
+            </table>
+            <div style="margin-top:.6rem;font-size:.72rem;color:#4a5568;"><strong>Patient result:</strong> CYP2C19 *2/*2 — poor metabolizer.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-clipboard-check"></i> Your workflow steps</h3>
+        <ul>
+          <li><i class="fas fa-check-circle"></i> <strong>Match genotype:</strong> *2/*2 → poor metabolizer.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Apply CPIC:</strong> strong recommendation to use an alternative antiplatelet (e.g., prasugrel or ticagrelor) instead of clopidogrel.</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Draft note:</strong> "CYP2C19 *2/*2 (poor metabolizer). CPIC recommends alternative antiplatelet. Notify prescriber before clopidogrel order."</li>
+          <li><i class="fas fa-check-circle"></i> <strong>Flag:</strong> route to pharmacist for review within 24h.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-flask"></i></div><h3>AI Prompt Lab · PGx handoff</h3><span class="ai-status">work mode</span></div>
+      <div class="prompt-lab">
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-pen"></i> Draft your work prompt</div>
+            <div class="lab-hint">Ask the AI to draft the note or match to CPIC.</div>
+            <textarea class="prompt-textarea" id="prompt-3-4" placeholder="e.g., Draft a clinical note for CYP2C19 *2/*2 poor metabolizer needing clopidogrel…"></textarea>
+            <div class="prompt-chips" data-lesson="3-4">
+              <span class="prompt-chip">Draft the PGx clinical note</span>
+              <span class="prompt-chip">Match *2/*2 to CPIC guidance</span>
+              <span class="prompt-chip">Explain poor metabolizer to the patient</span>
+            </div>
+            <div class="lab-actions">
+              <button class="lab-btn primary" data-lesson="3-4" data-action="run"><i class="fas fa-play"></i> Run prompt</button>
+              <button class="lab-btn secondary" data-lesson="3-4" data-action="clear"><i class="fas fa-eraser"></i> Clear</button>
+            </div>
+          </div>
+          <div class="prompt-score"><span><i class="fas fa-star"></i> Prompt quality</span><div class="score-bar"><div class="score-fill" id="score-3-4" style="width:0%;"></div></div></div>
+        </div>
+        <div class="prompt-lab-col">
+          <div class="lab-card">
+            <div class="lab-label"><i class="fas fa-comment-dots"></i> AI output</div>
+            <div class="response-box" id="response-3-4"><span class="placeholder">Run your prompt to see a draft here…</span></div>
+            <div class="why-box" id="why-3-4" style="display:none;"><strong>Why this works:</strong> <span></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  // ==================== WORK-PROMPT KNOWLEDGE BASE ====================
+  // Each entry returns a realistic work deliverable (note, summary, recommendation).
+  const WORK_KB = {
+    '1-1': {
+      entries: [
+        { keys:['triage','note','draft'], ans:'Triage note — 58F, new intake. Vitals: BP 148/92 (elevated), glucose 182 (high), HR 88, SpO₂ 97%, BMI 31.4. Hx: hypertension, family hx T2DM. Chief complaint: fatigue, increased thirst. Orders: HbA1c, BMP, lipid panel. Follow-up: 1 week. Flag: glucose >180 for same-day clinician review.', why:'You gave the AI the patient context and the task ("draft a triage note"). That combination produces a usable draft instead of generic advice.' },
+        { keys:['flag','first','prioritize'], ans:'Priority flags: (1) Glucose 182 — highest urgency, suggests uncontrolled hyperglycemia. (2) BP 148/92 — stage 1 hypertension, needs follow-up but not same-day. (3) BMI 31.4 — note for lifestyle counseling. Escalate #1 today; #2 and #3 in the follow-up visit.', why:'Asking "what to flag first" makes the AI rank, not just list. Ranking prompts are valuable for triage work.' },
+        { keys:['escalation','one-line','summary'], ans:'Escalation summary: "58F with glucose 182 and BP 148/92, hx HTN, family hx T2DM — recommend same-day clinician review for hyperglycemia; labs ordered."', why:'Specifying the format ("one-line summary") gets you a deliverable you can paste directly into the EHR.' },
+        { keys:['history','hx','context'], ans:'Context to include: age/sex, vitals (especially abnormal), chief complaint, relevant history, family history, and orders placed. This is the standard SOAP-style intake structure clinicians expect.', why:'Asking about what to include gives you a reusable checklist — very useful for repeated intake tasks.' }
+      ]
+    },
+    '1-2': {
+      entries: [
+        { keys:['prioritize','flag','critical'], ans:'Priority order: (1) Glucose 182 + HbA1c 7.8% — uncontrolled diabetes, highest urgency. (2) Creatinine 1.32 + eGFR 58 — mild renal impairment, second priority. (3) Electrolytes (Na, K) normal — no action. Recommend endocrine and renal follow-up.', why:'You asked the AI to prioritize — that produces a ranked list rather than a flat summary. Ranking prompts are essential in lab review.' },
+        { keys:['handoff','note','draft'], ans:'Lab handoff note: "Uncontrolled T2DM (A1c 7.8%, glucose 182) with mild renal impairment (creatinine 1.32, eGFR 58). Electrolytes normal. Recommend endocrine + renal follow-up; repeat BMP in 2 weeks."', why:'Naming the deliverable ("handoff note") gives you a paste-ready artifact. Always specify the format you need.' },
+        { keys:['renal','egfr','creatinine','non-clinician'], ans:'Renal flags explained simply: creatinine 1.32 is slightly above normal (0.6–1.1), and eGFR 58 is below the normal 90+ — together they suggest the kidneys are filtering a bit slower than expected. Not an emergency, but worth monitoring and repeating in 2 weeks.', why:'Specifying the audience ("non-clinician") makes the AI adjust tone and avoids jargon. Audience prompts are powerful.' },
+        { keys:['hba1c','a1c','diabetes'], ans:'HbA1c 7.8% reflects average glucose over ~3 months and is above the <5.7% normal range. Values 6.5%+ indicate diabetes; 7.8% suggests suboptimal control. Combined with a fasting glucose of 182, this supports intensified diabetes management.', why:'Asking about a specific lab value produces a precise, clinically grounded explanation.' }
+      ]
+    },
+    '1-3': {
+      entries: [
+        { keys:['half-life','compute','k='], ans:'Half-life calculation: t½ = ln(2)/k. With k = 0.20 h⁻¹, t½ = 0.693/0.20 ≈ 3.47 h. With C₀ = 9.8 mg/L, concentration drops to 4.9 mg/L at ~3.5 h and 2.45 mg/L at ~7 h. Consistent with the dashed line on the curve.', why:'You provided the formula inputs (C₀, k). Supplying numbers is the single biggest improvement you can make to a computational prompt.' },
+        { keys:['memo','summary','draft'], ans:'PK memo: "Single 500mg dose (n=24): C₀ ≈ 9.8 mg/L, t½ ≈ 3.5 h, AUC ≈ 4.8 mg·h/L. Exposure is consistent with once-daily dosing; no accumulation expected at this half-life."', why:'Specifying "memo" and the audience gets a formatted deliverable rather than a lecture.' },
+        { keys:['once-daily','dosing','reasonable'], ans:'Once-daily dosing check: with t½ ≈ 3.5 h, roughly 5 half-lives (~17.5 h) are needed to clear a dose. That fits a once-daily schedule with some residual trough levels — reasonable for many drugs, but confirm against the therapeutic window for this specific compound.', why:'Asking "is X reasonable?" invites a judgment with caveats — more useful than a yes/no.' },
+        { keys:['auc','exposure'], ans:'AUC ≈ 4.8 mg·h/L represents total drug exposure over the study period (shaded area under the curve). It is used to compare formulations, estimate bioavailability, and link exposure to efficacy/toxicity.', why:'Asking about a specific PK parameter produces a focused, quantitative explanation.' }
+      ]
+    },
+    '1-4': {
+      entries: [
+        { keys:['summarize','clinician','brca1'], ans:'Clinician summary: "Pathogenic BRCA1 frameshift (c.5266dupC, p.Gln1756Profs*74), heterozygous, ClinVar Pathogenic, DP=142. Loss-of-function variant associated with elevated hereditary breast/ovarian cancer risk. Recommend genetic counseling and enhanced screening."', why:'Naming the gene and the variant type gives the AI the exact context. Gene + variant + clinical question is the right prompt structure.' },
+        { keys:['dp','vaf','coverage'], ans:'DP = total read depth at the variant position (142 = very high confidence). VAF = variant allele fraction (0.51 ≈ heterozygous, as expected for a germline variant). Both metrics support a high-confidence call.', why:'Asking about specific metrics is exactly how you should probe a genomics report — the AI responds with metric-level explanations.' },
+        { keys:['referral','genetic counseling','note'], ans:'Referral note: "Patient carries a pathogenic BRCA1 frameshift (c.5266dupC), heterozygous. Recommend genetic counseling within 48h to discuss enhanced screening, family testing, and risk-reduction options."', why:'Specifying the action ("referral note") produces a usable artifact rather than a description of the variant.' },
+        { keys:['actionable','pathogenic','relevant'], ans:'Yes — this is actionable. BRCA1 loss-of-function variants are clinically actionable per NCCN guidelines: enhanced imaging, consideration of risk-reducing surgery, and cascade testing for relatives.', why:'Asking "is this actionable?" is the right framing for variant review — it forces a clinical judgment, not just a definition.' }
+      ]
+    },
+    '2-1': {
+      entries: [
+        { keys:['pandas','filter','group','script'], ans:'Python/pandas script:\n\nimport pandas as pd\ndf = pd.read_csv("patients_raw.csv")\nolder = df[df.age > 60]\nsummary = older.groupby("disease")["biomarker"].mean()\nprint(summary)\n\nExpected output: diabetes ≈ 8.13, hypertension ≈ 5.25.', why:'You named the tool (pandas) and the operations (filter, group). Tool + operation + example data is the reliable prompt pattern for code.' },
+        { keys:['tidyverse','translate','r'], ans:'R/tidyverse equivalent:\n\nlibrary(tidyverse)\ndf <- read_csv("patients_raw.csv")\ndf %>% filter(age > 60) %>% group_by(disease) %>% summarise(mean_bm = mean(biomarker))', why:'Asking for a translation between two tools is a high-value prompt — it verifies your understanding of both.' },
+        { keys:['row count','quality','check'], ans:'Data-quality checks to add: (1) nrow(df) before and after filtering. (2) df.isna().sum() for missing values. (3) df["age"].describe() for range sanity. (4) df["disease"].value_counts() for category consistency. These four checks catch most CSV issues before analysis.', why:'Asking for quality checks turns a one-off script into a reproducible workflow — a key work habit.' },
+        { keys:['summary','data quality','csv'], ans:'Data-quality summary: 5,240 rows, 14 columns. Missing values present in biomarker (likely ~3%). Age range 18–92. Disease categories: Type 2 Diabetes, Hypertension, plus 2 minor categories. Recommend documenting missingness before group summaries.', why:'Specifying "data-quality summary" produces a structured audit rather than a code snippet.' }
+      ]
+    },
+    '2-2': {
+      entries: [
+        { keys:['results','paragraph','summary'], ans:'Results paragraph: "Treatment A increased mean biomarker from 4.0 (SD 1.8) to 6.0 (SD 2.1), a 2.0-point difference (t=2.25, p=0.03, Cohen\'s d=0.58). The effect is statistically significant and medium-sized; replication in a larger cohort is recommended before clinical adoption."', why:'Naming the output ("results paragraph") and giving the stats makes the AI produce a publishable-ready summary.' },
+        { keys:['effect size','cohen','meaningful'], ans:'Cohen\'s d=0.58 is a medium effect. In clinical terms, this is often meaningful — but "meaningful" depends on the minimal clinically important difference (MCID) for this biomarker. Check the literature; if MCID is ~1.5 points, a 2.0-point change clears the bar.', why:'Asking "is this meaningful?" forces the AI to bring in the MCID concept — exactly the right follow-up question.' },
+        { keys:['assumption','t-test','check'], ans:'t-test assumptions to verify: (1) continuous outcome — yes. (2) Independent groups — yes. (3) Approximate normality — n=30/arm makes the t-test robust. (4) Equal variances — check with Levene\'s test; if violated, use Welch\'s t-test. (5) No extreme outliers — inspect boxplots.', why:'A checklist-style prompt ("check my assumptions") produces a checklist answer — exactly what you want for stats work.' },
+        { keys:['significant','p-value','clinical'], ans:'Statistical vs clinical significance: p=0.03 says the difference is unlikely under the null. It does NOT say the difference is clinically important. Cohen\'s d=0.58 adds that context — medium effect, likely meaningful. Always report both.', why:'Asking about the statistical/clinical distinction is a sophisticated prompt that yields a nuanced answer.' }
+      ]
+    },
+    '2-3': {
+      entries: [
+        { keys:['sql','join','query'], ans:'SQL query:\n\nSELECT p.name, l.test, l.value\nFROM patients p\nJOIN labs l ON p.id = l.patient_id\nWHERE l.test = \'HbA1c\';\n\nThis returns one row per patient-lab match. Use LEFT JOIN if you want patients with no labs included.', why:'Specifying the tables, the join key, and the filter is the reliable prompt pattern for SQL. Add the expected output to double-check.' },
+        { keys:['fhir','observation','map'], ans:'FHIR Observation mapping:\n\n{\n  "resourceType": "Observation",\n  "code": {"coding": [{"system": "http://loinc.org", "code": "4548-4", "display": "HbA1c"}]},\n  "subject": {"reference": "Patient/1"},\n  "valueQuantity": {"value": 7.2, "unit": "%"}\n}\n\nKey: LOINC code identifies the test, Patient reference links to the subject.', why:'Asking for a mapping to a named standard (FHIR) produces a structured payload you can hand to integration.' },
+        { keys:['duplicate','row','check'], ans:'Duplicate check: run SELECT patient_id, test, COUNT(*) FROM labs GROUP BY patient_id, test HAVING COUNT(*) > 1. If duplicates exist, the JOIN multiplies rows — dedupe with DISTINCT or a window function before export.', why:'Asking about a specific failure mode ("duplicates") produces a targeted check — much more useful than a generic "any issues?" prompt.' },
+        { keys:['left','inner','difference'], ans:'INNER JOIN returns only patients WITH matching labs. LEFT JOIN returns all patients, with NULLs where no lab exists. In clinical reporting, LEFT JOIN is usually safer — it preserves patients with missing data instead of silently dropping them.', why:'A comparison prompt ("left vs inner") produces a clear contrast — ideal for a design decision.' }
+      ]
+    },
+    '2-4': {
+      entries: [
+        { keys:['bfs','trace','a'], ans:'BFS trace from A: queue=[A]. Visit A → enqueue neighbors B,C. Visit B → enqueue D. Visit C (D already queued). Visit D → enqueue E,F. Visit E, F. BFS order: A, B, C, D, E, F. Distances: B,C=1; D=2; E,F=3.', why:'Asking for a trace with a starting node ("trace BFS from A") produces a step-by-step walkthrough — exactly what you need for a design note.' },
+        { keys:['bfs','dfs','shortest'], ans:'BFS vs DFS for shortest paths: BFS is correct for shortest paths in unweighted graphs — it explores level by level. DFS does not guarantee shortest paths. For connectivity/cycle checks, DFS is fine. Choose based on the question, not habit.', why:'A comparison prompt tied to a task ("for shortest paths") produces a decision-relevant answer.' },
+        { keys:['adjacency','list','matrix'], ans:'Adjacency list vs matrix: adjacency list uses O(V+E) memory and is ideal for sparse graphs (most biological networks). Matrix uses O(V²) and is better for dense graphs or when you need O(1) edge lookups. For a protein-interaction network, adjacency list is the standard choice.', why:'Asking for a justification with a context ("for this network") produces a reasoned recommendation rather than a textbook definition.' },
+        { keys:['big-o','complexity','v+e'], ans:'Complexity: BFS/DFS are O(V+E) with an adjacency list — linear in nodes plus edges. With a matrix, traversal becomes O(V²). For n=1,000 nodes and ~5,000 edges, the list is ~5× faster in memory-bound terms.', why:'Asking about complexity with a concrete graph size produces a quantitative comparison — useful for design trade-offs.' }
+      ]
+    },
+    '3-1': {
+      entries: [
+        { keys:['go','no-go','recommendation','draft'], ans:'Recommendation: CONDITIONAL GO. AUC 0.85 is good overall, but calibration (Brier 0.12) is borderline and subgroup AUC for age ≥65 drops to 0.78 with worse calibration (0.16). Deploy only after recalibrating the age ≥65 subgroup and adding a monitoring plan for subgroup drift.', why:'Naming the deliverable ("go/no-go recommendation") and listing the metrics produces a decision-ready artifact.' },
+        { keys:['brier','calibration','0.12'], ans:'Brier score 0.12: lower is better (0 = perfect, 0.25 = coin flip for binary outcomes). 0.12 is acceptable but not excellent — it suggests predicted probabilities are somewhat off. Check the calibration plot; recalibration (Platt scaling or isotonic) may reduce it.', why:'Asking about a specific metric value produces a precise benchmark — much more useful than "is calibration ok?".' },
+        { keys:['bias','subgroup','age'], ans:'Subgroup bias signal: AUC drops from 0.87 (age <65) to 0.78 (age ≥65), and calibration worsens from 0.09 to 0.16. That gap is large enough to warrant investigation — possible causes include different base rates, feature drift, or underrepresentation in training. Recommend subgroup-specific recalibration.', why:'Asking the AI to flag bias in a named subgroup produces a targeted analysis instead of a generic fairness lecture.' },
+        { keys:['threshold','sensitivity','specificity'], ans:'Threshold trade-off: at the current threshold, sensitivity 0.80 and specificity 0.80. Lowering the threshold raises sensitivity (catch more sepsis) but lowers specificity (more false alarms). For sepsis, a sensitivity-first threshold is usually justified — but validate against local alert-fatigue data.', why:'Asking about the threshold trade-off in a clinical context produces a decision-framed answer, not just a math definition.' }
+      ]
+    },
+    '3-2': {
+      entries: [
+        { keys:['low','coverage','flag'], ans:'Low-coverage flags: chr17 DP=12 is below the reliable threshold (typically DP ≥ 20 for germline calls). chr7 (DP=42) and chr13 (DP=38) are high-confidence. Recommend Sanger confirmation for chr17 before reporting.', why:'Naming the metric (DP) and the threshold logic produces a precise review — exactly what a QC note needs.' },
+        { keys:['qc','summary','run'], ans:'QC summary: "Run 2024-0412-A: 32M reads, 99.2% mapped, 142,318 variants called. Two high-confidence variants (chr7 DP=42, chr13 DP=38); one low-coverage hit (chr17 DP=12) flagged for orthogonal confirmation. Annotation running."', why:'Specifying "QC summary" produces a paste-ready artifact for the run log.' },
+        { keys:['dp','af','vcf'], ans:'DP = read depth at the variant position (higher = more confidence). AF = allele fraction (0.5 ≈ heterozygous for germline; lower values may indicate somatic or mosaic). Rule of thumb: germline calls need DP ≥ 20 and AF near 0.5.', why:'Asking about two specific VCF fields produces a targeted explanation with thresholds — more useful than a generic VCF overview.' },
+        { keys:['confirm','sanger','orthogonal'], ans:'Orthogonal confirmation: Sanger sequencing is the standard for low-coverage or clinically actionable calls. It independently verifies the variant and catches false positives from alignment artifacts.', why:'Asking about a specific follow-up action produces an actionable recommendation, not just a definition.' }
+      ]
+    },
+    '3-3': {
+      entries: [
+        { keys:['tuning','logic','propose'], ans:'Proposed tuning logic: (1) Suppress alert if INR < 3.0 AND GI protection is ordered. (2) Fire only for NSAID doses above low-dose threshold. (3) De-duplicate within 24h per patient. Expected impact: ~60% fewer fires, no increase in adverse events based on local data.', why:'Asking for "tuning logic" with numbers produces a concrete rule set — exactly what a governance committee needs.' },
+        { keys:['governance','committee','note'], ans:'Governance note: "Warfarin+NSAID alert fires 42×/day with 90% dismissal — consistent with alert fatigue. Proposed suppression when INR <3.0 and GI protection ordered. Expected 60% reduction in fires; no safety signal in local data. Request approval for 30-day pilot with monitoring."', why:'Specifying the audience (governance committee) shapes the tone and structure — a key prompt-engineering move.' },
+        { keys:['impact','estimate','suppression'], ans:'Impact estimate: if 90% of current fires occur with INR <3.0 and GI protection, suppression would remove ~38 of 42 daily alerts. Historical review suggests 0 of those were acted on, so safety impact is expected to be neutral. Monitor for 30 days.', why:'Asking for an estimate with assumptions produces a defensible number rather than a vague claim.' },
+        { keys:['fatigue','dismiss','90'], ans:'Alert fatigue signal: 38/42 (90%) dismissed in a day. Best-practice threshold: dismiss rates above ~70% usually indicate the alert is too broad. Options: narrow the logic, raise the threshold, or downgrade to a non-interruptive informational note.', why:'Asking about a specific behavior (dismissal) produces a benchmarked interpretation — the AI can compare against best practice.' }
+      ]
+    },
+    '3-4': {
+      entries: [
+        { keys:['note','draft','pgx'], ans:'PGx clinical note: "CYP2C19 *2/*2 (poor metabolizer). CPIC strong recommendation: avoid clopidogrel; use alternative antiplatelet (prasugrel or ticagrelor). Prescriber notified; pharmacist review within 24h."', why:'Naming the deliverable ("clinical note") and the genotype produces a paste-ready artifact for the chart.' },
+        { keys:['cpic','guidance','match'], ans:'CPIC match: CYP2C19 *2/*2 = poor metabolizer → strong recommendation to use an alternative antiplatelet. Clopidogrel is a prodrug requiring CYP2C19 activation; poor metabolizers have reduced active metabolite and higher risk of treatment failure.', why:'Asking for a "match" to a named guideline produces a structured recommendation, not a lecture.' },
+        { keys:['patient','explain','plain'], ans:'Patient explanation: "Your genetic test shows your body processes clopidogrel slowly, so it may not work as well for you. We recommend a different blood thinner that works regardless of this gene. Your care team will review before prescribing."', why:'Specifying the audience ("explain to the patient") produces plain-language text — a critical skill in clinical communication.' },
+        { keys:['alternative','antiplatelet','prasugrel','ticagrelor'], ans:'Alternatives: prasugrel and ticagrelor do not require CYP2C19 activation, so they are preferred in poor metabolizers. Choice depends on bleeding risk, ACS vs. stable CAD indication, and cost. Document the rationale in the note.', why:'Asking about alternatives with a "why" produces a reasoned recommendation with caveats — more useful than a drug list.' }
+      ]
+    }
+  };
+
+  // ==================== PROMPT QUALITY SCORING ====================
+  function scorePrompt(text) {
+    const lower = text.toLowerCase().trim();
+    if (!lower) return 0;
+    let score = 0;
+    if (lower.length > 15) score += 15;
+    if (lower.length > 40) score += 10;
+    if (lower.length > 80) score += 5;
+    if (/\b(draft|write|summarize|explain|propose|check|review|prioritize|compute|trace|map|translate|flag)\b/.test(lower)) score += 20;
+    const workTerms = ['note','summary','handoff','recommendation','query','script','payload','logic','memo','report','flag','qc','triage','cpic','fhir','sql','pandas','tidyverse','dp','af','inr','egfr','a1c','brca1','cyp2c19','auc','brier','roc','bfs','dfs','join','observation'];
+    for (const term of workTerms) { if (lower.includes(term)) { score += 12; break; } }
+    if (/\b(above|table|sample|screen|dashboard|graph|vcf|dataset)\b/.test(lower)) score += 15;
+    if (/\b(patient|cohort|clinician|committee|governance|prescriber|pharmacist)\b/.test(lower)) score += 10;
+    if (/\d/.test(lower)) score += 10; // numbers present = more concrete
+    if (/\b(vs\.?|versus|compare|difference between)\b/.test(lower)) score += 10;
+    return Math.min(100, score);
+  }
+
+  function getPromptFeedback(score) {
+    if (score >= 80) return 'Excellent work prompt — it names the deliverable, includes specifics, and references the context. This is the pattern to reuse.';
+    if (score >= 55) return 'Good work prompt. Add the deliverable name (e.g., "draft a note") or a specific number to sharpen the output.';
+    if (score >= 30) return 'Basic prompt. Try naming the exact output you need and including one concrete value from the mockup.';
+    return 'Short prompt. State the task, the context, and the format you want — that triad gets work-ready output.';
+  }
+
+  function getWorkAnswer(lessonId, userText) {
+    const lesson = WORK_KB[lessonId];
+    if (!lesson) return { ans: "No knowledge base for this playbook.", why: '' };
+    const lower = userText.toLowerCase();
+    let best = null, bestScore = 0;
+    for (const entry of lesson.entries) {
+      let score = 0;
+      for (const key of entry.keys) { if (lower.includes(key.toLowerCase())) score += key.length; }
+      if (score > bestScore) { bestScore = score; best = entry; }
+    }
+    if (best && bestScore > 0) return { ans: best.ans, why: best.why };
+    return {
+      ans: 'I don\'t have a canned deliverable for that exact prompt. Try rephrasing with a specific term from the mockup (e.g., "DP=12", "CYP2C19 *2/*2", "INR < 3.0") — or click a suggestion chip.',
+      why: 'Specific terms get specific work output. This is the core prompting lesson: vague prompts → generic answers; specific prompts → usable deliverables.'
+    };
+  }
+
+  // ==================== UI LOGIC ====================
+  function runPrompt(lessonId) {
+    const textarea = document.getElementById('prompt-' + lessonId);
+    const responseBox = document.getElementById('response-' + lessonId);
+    const whyBox = document.getElementById('why-' + lessonId);
+    const scoreFill = document.getElementById('score-' + lessonId);
+    if (!textarea || !responseBox) return;
+
+    const text = textarea.value.trim();
+    if (!text) {
+      responseBox.innerHTML = '<span class="placeholder">Write a prompt first, then click Run prompt.</span>';
+      if (whyBox) whyBox.style.display = 'none';
+      if (scoreFill) scoreFill.style.width = '0%';
+      return;
+    }
+
+    const score = scorePrompt(text);
+    if (scoreFill) scoreFill.style.width = score + '%';
+
+    responseBox.innerHTML = '<span class="placeholder"><i class="fas fa-spinner fa-spin"></i> Generating work draft…</span>';
+    if (whyBox) whyBox.style.display = 'none';
+
+    setTimeout(() => {
+      const result = getWorkAnswer(lessonId, text);
+      responseBox.innerHTML = '<div class="ai-answer">' + result.ans + '</div>';
+      if (whyBox && result.why) {
+        whyBox.style.display = 'block';
+        whyBox.querySelector('span').textContent = result.why + ' ' + getPromptFeedback(score);
+      }
+    }, 550 + Math.random() * 400);
+  }
+
+  function clearPrompt(lessonId) {
+    const textarea = document.getElementById('prompt-' + lessonId);
+    const responseBox = document.getElementById('response-' + lessonId);
+    const whyBox = document.getElementById('why-' + lessonId);
+    const scoreFill = document.getElementById('score-' + lessonId);
+    if (textarea) textarea.value = '';
+    if (responseBox) responseBox.innerHTML = '<span class="placeholder">Run your prompt to see a draft here…</span>';
+    if (whyBox) whyBox.style.display = 'none';
+    if (scoreFill) scoreFill.style.width = '0%';
+  }
+
+  document.querySelectorAll('.lab-btn').forEach(btn => {
+    const lessonId = btn.getAttribute('data-lesson');
+    const action = btn.getAttribute('data-action');
+    btn.addEventListener('click', () => {
+      if (action === 'run') runPrompt(lessonId);
+      else if (action === 'clear') clearPrompt(lessonId);
+    });
+  });
+
+  document.querySelectorAll('.prompt-chips').forEach(container => {
+    const lessonId = container.getAttribute('data-lesson');
+    container.querySelectorAll('.prompt-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        const textarea = document.getElementById('prompt-' + lessonId);
+        if (!textarea) return;
+        textarea.value = chip.textContent.trim();
+        textarea.focus();
+        runPrompt(lessonId);
+      });
+    });
+  });
+
+  document.querySelectorAll('.prompt-textarea').forEach(textarea => {
+    textarea.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+        const lessonId = textarea.id.replace('prompt-', '');
+        runPrompt(lessonId);
+      }
+    });
+  });
+
+  // ==================== MODAL OPEN / CLOSE ====================
+  const backdrop = document.getElementById('modal-backdrop');
+  const allModals = backdrop.querySelectorAll('.modal');
+  let lastFocused = null;
+
+  function openModal(id) {
+    allModals.forEach(m => m.hidden = true);
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.hidden = false;
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    const closeBtn = target.querySelector('.modal-close');
+    if (closeBtn) closeBtn.focus();
+    lastFocused = document.activeElement;
+  }
+
+  function closeModal() {
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    allModals.forEach(m => m.hidden = true);
+    if (lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('.destination-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const modalId = card.getAttribute('data-modal');
+      if (modalId) openModal(modalId);
+    });
+  });
+
+  backdrop.addEventListener('click', (e) => { if (e.target === backdrop) closeModal(); });
+  backdrop.querySelectorAll('.modal-close').forEach(btn => btn.addEventListener('click', closeModal));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && backdrop.classList.contains('open')) closeModal();
+  });
+})();
+</script>
+</body>
+</html>

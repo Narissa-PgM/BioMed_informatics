@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+  <a href="index.html" style="position:fixed;top:1rem;left:1rem;z-index:9999;background:white;border:1px solid #e2e8f0;border-radius:.75rem;padding:.5rem .85rem;font-size:.8rem;font-weight:600;color:#2b6cb0;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;align-items:center;gap:.4rem;">← Home</a>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioMed Informatics · AI-Powered Visual Learning Path</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',system-ui,-apple-system,sans-serif;}
+  body{background:#f7fafc;color:#1a202c;line-height:1.55;padding:1.5rem 1rem 3rem;}
+  .container{max-width:1200px;margin:0 auto;}
+
+  /* HEADER */
+  .compact-header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;background:white;border-radius:1.5rem;padding:1rem 1.75rem;box-shadow:0 4px 12px rgba(0,0,0,.02),0 1px 3px rgba(0,0,0,.05);margin-bottom:2rem;border:1px solid #e2e8f0;}
+  .header-title{display:flex;align-items:center;gap:.75rem;}
+  .header-title i{font-size:2rem;color:#2b6cb0;background:#ebf4ff;padding:.5rem;border-radius:1rem;}
+  .header-title h1{font-size:1.4rem;font-weight:600;letter-spacing:-.01em;}
+  .header-title span{font-weight:400;color:#4a5568;font-size:.9rem;display:block;margin-top:.15rem;}
+  .header-meta{display:flex;gap:1.25rem;font-size:.85rem;color:#4a5568;background:#f8fafc;padding:.5rem 1rem;border-radius:2rem;}
+  .header-meta i{margin-right:.35rem;color:#2b6cb0;}
+
+  .path-label{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;padding-left:.25rem;}
+  .path-label i{color:#2b6cb0;font-size:1.25rem;}
+  .path-label h2{font-size:1.2rem;font-weight:500;color:#2d3748;}
+  .path-label p{font-size:.85rem;color:#718096;margin-left:auto;font-style:italic;}
+
+  /* STAGES */
+  .stage-group{margin-bottom:2.5rem;}
+  .stage-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1.25rem;border-bottom:2px solid #e2e8f0;padding-bottom:.5rem;}
+  .stage-number{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;background:#2b6cb0;color:white;font-weight:600;font-size:1rem;border-radius:.75rem;box-shadow:0 2px 6px rgba(43,108,176,.25);}
+  .stage-header h3{font-size:1.2rem;font-weight:600;color:#1a202c;}
+  .stage-header .stage-desc{font-size:.85rem;color:#718096;margin-left:.5rem;}
+
+  /* CARDS */
+  .card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.25rem;}
+  .destination-card{background:white;border-radius:1.25rem;padding:1.35rem 1.5rem;box-shadow:0 4px 12px rgba(0,0,0,.02),0 1px 3px rgba(0,0,0,.03);border:1px solid #e2e8f0;border-left:5px solid #2b6cb0;transition:all .15s ease;display:flex;flex-direction:column;cursor:pointer;text-align:left;}
+  .destination-card:hover{transform:translateY(-2px);box-shadow:0 12px 24px -8px rgba(0,0,0,.08),0 2px 8px rgba(0,0,0,.02);border-color:#cbd5e0;}
+  .destination-card:focus-visible{outline:3px solid #2b6cb0;outline-offset:2px;}
+  .card-bio{border-left-color:#2f855a;}
+  .card-informatics{border-left-color:#2b6cb0;}
+  .card-mixed{border-left-color:#6b46c1;}
+  .card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;}
+  .card-header i{font-size:1.5rem;background:#f7fafc;padding:.45rem;border-radius:.85rem;color:#2d3748;}
+  .card-category{font-size:.65rem;text-transform:uppercase;letter-spacing:.05em;font-weight:600;padding:.2rem .6rem;border-radius:2rem;background:#edf2f7;color:#4a5568;}
+  .card-title{font-size:1.05rem;font-weight:600;margin-bottom:.35rem;color:#1a202c;line-height:1.3;}
+  .card-desc{font-size:.82rem;color:#4a5568;margin-bottom:.85rem;flex:1;}
+  .card-footer{display:flex;align-items:center;justify-content:space-between;font-size:.72rem;color:#718096;border-top:1px solid #edf2f7;padding-top:.7rem;}
+  .card-footer .topics{display:flex;flex-wrap:wrap;gap:.3rem;}
+  .topic-pill{background:#f1f5f9;padding:.15rem .45rem;border-radius:1rem;font-size:.68rem;color:#2d3748;}
+  .card-number{font-weight:700;color:#2b6cb0;background:#ebf4ff;border-radius:.5rem;padding:.1rem .5rem;font-size:.75rem;}
+
+  /* LEGEND */
+  .legend{display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:2rem;padding:1rem 1.5rem;background:white;border-radius:1rem;border:1px solid #e2e8f0;font-size:.8rem;color:#4a5568;align-items:center;}
+  .legend-item{display:flex;align-items:center;gap:.4rem;}
+  .legend-dot{width:12px;height:12px;border-radius:4px;}
+  .dot-bio{background:#2f855a;}.dot-info{background:#2b6cb0;}.dot-mixed{background:#6b46c1;}
+  .legend-ai{background:#f3e8ff;color:#6b46c1;padding:.25rem .6rem;border-radius:1rem;font-size:.75rem;font-weight:600;}
+
+  /* ============ MODAL ============ */
+  .modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;padding:1rem;z-index:1000;backdrop-filter:blur(2px);}
+  .modal-backdrop.open{display:flex;}
+  .modal{background:white;border-radius:1.5rem;max-width:900px;width:100%;max-height:92vh;overflow-y:auto;padding:0;box-shadow:0 25px 50px -12px rgba(0,0,0,.25);position:relative;animation:modalIn .18s ease-out;}
+  @keyframes modalIn{from{opacity:0;transform:translateY(12px) scale(.98);}to{opacity:1;transform:none;}}
+  .modal-close{position:absolute;top:1rem;right:1rem;width:2.25rem;height:2.25rem;border-radius:.75rem;border:none;background:#f1f5f9;color:#4a5568;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background .12s;}
+  .modal-close:hover{background:#e2e8f0;color:#1a202c;}
+
+  .lesson-body{padding:2rem 2rem 1.5rem;}
+  .modal-badge{display:inline-block;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;font-weight:600;padding:.25rem .75rem;border-radius:2rem;margin-bottom:.85rem;}
+  .badge-bio{background:#e6fffa;color:#2f855a;}
+  .badge-informatics{background:#ebf4ff;color:#2b6cb0;}
+  .badge-mixed{background:#f3e8ff;color:#6b46c1;}
+  .modal h2{font-size:1.45rem;font-weight:600;margin-bottom:.4rem;color:#1a202c;padding-right:2.5rem;}
+  .modal .modal-meta{font-size:.8rem;color:#718096;margin-bottom:1.25rem;display:flex;gap:1rem;flex-wrap:wrap;}
+  .modal .modal-meta i{margin-right:.3rem;color:#2b6cb0;}
+
+  .lesson-section{margin-bottom:1.5rem;}
+  .lesson-section h3{font-size:.85rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:#2b6cb0;margin-bottom:.6rem;display:flex;align-items:center;gap:.4rem;}
+  .lesson-section p{font-size:.92rem;color:#2d3748;margin-bottom:.6rem;}
+  .lesson-section ul{list-style:none;display:flex;flex-direction:column;gap:.4rem;margin-left:.25rem;}
+  .lesson-section ul li{display:flex;gap:.6rem;font-size:.88rem;color:#2d3748;}
+  .lesson-section ul li i{color:#2f855a;margin-top:.2rem;flex-shrink:0;font-size:.8rem;}
+  .lesson-section ul li strong{color:#1a202c;}
+
+  /* ---------- VISUAL COMPONENTS ---------- */
+  .visual-frame{background:#f8fafc;border:1px solid #e2e8f0;border-radius:1rem;padding:1rem;margin:.75rem 0;}
+  .visual-frame svg{display:block;width:100%;height:auto;}
+  .visual-caption{font-size:.75rem;color:#718096;text-align:center;margin-top:.5rem;font-style:italic;}
+
+  /* DATA TABLE */
+  .data-table{width:100%;border-collapse:collapse;font-size:.78rem;margin:.5rem 0;background:white;border-radius:.5rem;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+  .data-table th{background:#2b6cb0;color:white;padding:.5rem .6rem;text-align:left;font-weight:600;font-size:.72rem;text-transform:uppercase;letter-spacing:.03em;}
+  .data-table td{padding:.45rem .6rem;border-bottom:1px solid #edf2f7;color:#2d3748;}
+  .data-table tr:nth-child(even) td{background:#f8fafc;}
+  .data-table tr:last-child td{border-bottom:none;}
+  .data-table .flag-high{color:#c53030;font-weight:600;}
+  .data-table .flag-normal{color:#2f855a;}
+
+  /* CODE BLOCK */
+  .code-block{background:#1a202c;border-radius:.75rem;padding:1rem 1.15rem;font-family:'SF Mono',Menlo,Consolas,monospace;font-size:.78rem;line-height:1.6;overflow-x:auto;margin:.5rem 0;position:relative;}
+  .code-block .code-lang{position:absolute;top:.5rem;right:.75rem;font-size:.6rem;text-transform:uppercase;letter-spacing:.05em;color:#a0aec0;font-weight:600;}
+  .code-block code{color:#e2e8f0;}
+  .code-block .kw{color:#f687b3;}
+  .code-block .str{color:#9ae6b4;}
+  .code-block .num{color:#fbd38d;}
+  .code-block .com{color:#718096;font-style:italic;}
+  .code-block .fn{color:#90cdf4;}
+  .code-block .op{color:#fbb6ce;}
+
+  /* BAR CHART */
+  .bar-chart{display:flex;flex-direction:column;gap:.5rem;margin:.5rem 0;}
+  .bar-row{display:flex;align-items:center;gap:.6rem;font-size:.75rem;}
+  .bar-label{width:90px;color:#4a5568;font-weight:500;flex-shrink:0;}
+  .bar-track{flex:1;height:22px;background:#edf2f7;border-radius:.4rem;overflow:hidden;position:relative;}
+  .bar-fill{height:100%;border-radius:.4rem;display:flex;align-items:center;justify-content:flex-end;padding-right:.4rem;color:white;font-size:.68rem;font-weight:600;transition:width .4s;}
+  .bar-fill.blue{background:linear-gradient(90deg,#4299e1,#2b6cb0);}
+  .bar-fill.green{background:linear-gradient(90deg,#48bb78,#2f855a);}
+  .bar-fill.purple{background:linear-gradient(90deg,#9f7aea,#6b46c1);}
+  .bar-fill.red{background:linear-gradient(90deg,#f56565,#c53030);}
+
+  /* SEQUENCE VIEWER */
+  .seq-viewer{background:#1a202c;border-radius:.75rem;padding:1rem;font-family:'SF Mono',Menlo,monospace;font-size:.75rem;overflow-x:auto;line-height:1.8;}
+  .seq-line{display:flex;gap:.5rem;white-space:nowrap;}
+  .seq-pos{color:#718096;width:60px;flex-shrink:0;text-align:right;}
+  .seq-bases{color:#e2e8f0;letter-spacing:.15em;}
+  .seq-bases .base-a{color:#f687b3;}
+  .seq-bases .base-t{color:#90cdf4;}
+  .seq-bases .base-g{color:#9ae6b4;}
+  .seq-bases .base-c{color:#fbd38d;}
+  .seq-bases .base-n{color:#718096;}
+  .seq-mut{background:#c53030;color:white;padding:0 .1em;border-radius:.15rem;}
+  .seq-ref{color:#718096;}
+  .seq-aa{color:#a0aec0;letter-spacing:.15em;margin-left:.5rem;font-size:.7rem;}
+
+  /* CHART SVG CONTAINERS */
+  .chart-container{background:white;border-radius:.75rem;padding:1rem;border:1px solid #e2e8f0;margin:.5rem 0;}
+
+  /* CLINICAL DASHBOARD */
+  .dashboard{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:.6rem;margin:.5rem 0;}
+  .dash-card{background:white;border:1px solid #e2e8f0;border-radius:.6rem;padding:.65rem .75rem;}
+  .dash-card .dash-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.04em;color:#718096;font-weight:600;}
+  .dash-card .dash-value{font-size:1.15rem;font-weight:700;color:#1a202c;margin-top:.15rem;}
+  .dash-card .dash-unit{font-size:.68rem;color:#718096;font-weight:400;}
+  .dash-card.warn{border-left:3px solid #e53e3e;}
+  .dash-card.ok{border-left:3px solid #38a169;}
+  .dash-card.info{border-left:3px solid #3182ce;}
+
+  /* EXAMPLE BOX */
+  .example-box{background:#f7fafc;border-left:4px solid #6b46c1;border-radius:.75rem;padding:1rem 1.15rem;margin-top:.5rem;font-size:.88rem;color:#2d3748;}
+  .example-box strong{color:#6b46c1;display:block;margin-bottom:.3rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;}
+
+  /* ---------- AI TUTOR ---------- */
+  .ai-panel{background:linear-gradient(135deg,#faf5ff 0%,#f3e8ff 100%);border-top:2px solid #d6bcfa;padding:1.5rem 2rem;}
+  .ai-header{display:flex;align-items:center;gap:.6rem;margin-bottom:1rem;}
+  .ai-header .ai-icon{width:2.25rem;height:2.25rem;background:#6b46c1;color:white;border-radius:.75rem;display:flex;align-items:center;justify-content:center;font-size:1rem;box-shadow:0 2px 8px rgba(107,70,193,.3);}
+  .ai-header h3{font-size:1rem;font-weight:600;color:#44337a;}
+  .ai-header .ai-status{font-size:.7rem;background:#e9d8fd;color:#6b46c1;padding:.2rem .55rem;border-radius:1rem;font-weight:600;margin-left:auto;}
+  .ai-suggestions{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.85rem;}
+  .ai-suggestion{background:white;border:1px solid #d6bcfa;color:#553c9a;font-size:.75rem;padding:.35rem .7rem;border-radius:1rem;cursor:pointer;transition:all .12s;font-weight:500;}
+  .ai-suggestion:hover{background:#6b46c1;color:white;border-color:#6b46c1;}
+  .ai-chat{background:white;border-radius:.85rem;padding:.75rem;max-height:240px;overflow-y:auto;margin-bottom:.75rem;display:flex;flex-direction:column;gap:.6rem;border:1px solid #e9d8fd;}
+  .ai-msg{display:flex;gap:.5rem;font-size:.85rem;line-height:1.5;}
+  .ai-msg .avatar{width:1.6rem;height:1.6rem;border-radius:.5rem;display:flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0;font-weight:700;}
+  .ai-msg.tutor .avatar{background:#6b46c1;color:white;}
+  .ai-msg.user{flex-direction:row-reverse;}
+  .ai-msg.user .avatar{background:#2b6cb0;color:white;}
+  .ai-msg .bubble{padding:.5rem .75rem;border-radius:.75rem;max-width:85%;}
+  .ai-msg.tutor .bubble{background:#faf5ff;color:#2d3748;border:1px solid #e9d8fd;}
+  .ai-msg.user .bubble{background:#ebf4ff;color:#1a365d;border:1px solid #bee3f8;}
+  .ai-input-row{display:flex;gap:.5rem;}
+  .ai-input{flex:1;border:1px solid #d6bcfa;border-radius:.75rem;padding:.6rem .85rem;font-size:.85rem;outline:none;transition:border .12s;font-family:inherit;background:white;}
+  .ai-input:focus{border-color:#6b46c1;box-shadow:0 0 0 3px rgba(107,70,193,.1);}
+  .ai-send{background:#6b46c1;color:white;border:none;border-radius:.75rem;padding:.6rem 1rem;font-size:.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:background .12s;}
+  .ai-send:hover{background:#553c9a;}
+  .typing-dots{display:inline-flex;gap:.2rem;}
+  .typing-dots span{width:.35rem;height:.35rem;background:#6b46c1;border-radius:50%;animation:bounce 1.2s infinite;}
+  .typing-dots span:nth-child(2){animation-delay:.15s;}
+  .typing-dots span:nth-child(3){animation-delay:.3s;}
+  @keyframes bounce{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-4px);opacity:1;}}
+
+  @media(max-width:680px){
+    .compact-header{flex-direction:column;align-items:flex-start;gap:1rem;}
+    .header-meta{width:100%;justify-content:space-between;flex-wrap:wrap;}
+    .path-label{flex-wrap:wrap;}
+    .path-label p{margin-left:0;width:100%;}
+    .lesson-body{padding:1.5rem 1.25rem 1rem;}
+    .ai-panel{padding:1.25rem;}
+    .modal h2{font-size:1.2rem;}
+    .dashboard{grid-template-columns:repeat(2,1fr);}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header class="compact-header">
+    <div class="header-title">
+      <i class="fas fa-dna"></i>
+      <div>
+        <h1>Biomedical Informatics &amp; Biological Sciences</h1>
+        <span>Visual lessons · real data · AI tutor in every card</span>
+      </div>
+    </div>
+    <div class="header-meta">
+      <div><i class="fas fa-layer-group"></i> 3 stages</div>
+      <div><i class="fas fa-chart-line"></i> real samples</div>
+      <div><i class="fas fa-robot"></i> AI tutor</div>
+    </div>
+  </header>
+
+  <div class="path-label">
+    <i class="fas fa-route"></i>
+    <h2>Numbered learning path</h2>
+    <p>click a card to see diagrams, data, code &amp; ask the tutor</p>
+  </div>
+
+  <!-- STAGE 1 -->
+  <section class="stage-group">
+    <div class="stage-header">
+      <span class="stage-number">1</span>
+      <h3>Biological sciences core</h3>
+      <span class="stage-desc">natural science &amp; math foundation</span>
+    </div>
+    <div class="card-grid">
+      <button class="destination-card card-bio" data-modal="m-1-1">
+        <div class="card-header"><i class="fas fa-seedling"></i><span class="card-category">biology</span></div>
+        <div class="card-title">General Biology</div>
+        <div class="card-desc">Cell diagrams, organelle tables, and a real microscopy-style visual of a eukaryotic cell.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">cells</span><span class="topic-pill">organelles</span></div><span class="card-number">1.1</span></div>
+      </button>
+      <button class="destination-card card-bio" data-modal="m-1-2">
+        <div class="card-header"><i class="fas fa-flask"></i><span class="card-category">chemistry</span></div>
+        <div class="card-title">General &amp; Organic Chemistry</div>
+        <div class="card-desc">Functional group reference table with structural formulas and a molecular diagram.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">bonding</span><span class="topic-pill">functional groups</span></div><span class="card-number">1.2</span></div>
+      </button>
+      <button class="destination-card card-bio" data-modal="m-1-3">
+        <div class="card-header"><i class="fas fa-calculator"></i><span class="card-category">quantitative</span></div>
+        <div class="card-title">Physics &amp; Calculus</div>
+        <div class="card-desc">A real drug-concentration curve with derivative overlay and AUC calculation.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">derivatives</span><span class="topic-pill">pharmacokinetics</span></div><span class="card-number">1.3</span></div>
+      </button>
+      <button class="destination-card card-bio" data-modal="m-1-4">
+        <div class="card-header"><i class="fas fa-dna"></i><span class="card-category">biology</span></div>
+        <div class="card-title">Genetics &amp; Molecular Biology</div>
+        <div class="card-desc">Annotated DNA sequence with a real point mutation and translation to protein.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">DNA</span><span class="topic-pill">mutations</span></div><span class="card-number">1.4</span></div>
+      </button>
+    </div>
+  </section>
+
+  <!-- STAGE 2 -->
+  <section class="stage-group">
+    <div class="stage-header">
+      <span class="stage-number">2</span>
+      <h3>Computing &amp; informatics core</h3>
+      <span class="stage-desc">programming, data, and algorithms</span>
+    </div>
+    <div class="card-grid">
+      <button class="destination-card card-informatics" data-modal="m-2-1">
+        <div class="card-header"><i class="fas fa-code"></i><span class="card-category">programming</span></div>
+        <div class="card-title">Python &amp; R for Life Sciences</div>
+        <div class="card-desc">Real code blocks in Python and R, side-by-side, producing the same result.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">python</span><span class="topic-pill">R</span></div><span class="card-number">2.1</span></div>
+      </button>
+      <button class="destination-card card-informatics" data-modal="m-2-2">
+        <div class="card-header"><i class="fas fa-chart-bar"></i><span class="card-category">statistics</span></div>
+        <div class="card-title">Statistics &amp; Probability</div>
+        <div class="card-desc">A real dataset, a t-test result, and an actual bar chart of group means.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">t-test</span><span class="topic-pill">p-values</span></div><span class="card-number">2.2</span></div>
+      </button>
+      <button class="destination-card card-informatics" data-modal="m-2-3">
+        <div class="card-header"><i class="fas fa-database"></i><span class="card-category">data</span></div>
+        <div class="card-title">Databases &amp; Data Integration</div>
+        <div class="card-desc">A SQL query and its actual result table from a patient-labs join.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">SQL</span><span class="topic-pill">joins</span></div><span class="card-number">2.3</span></div>
+      </button>
+      <button class="destination-card card-informatics" data-modal="m-2-4">
+        <div class="card-header"><i class="fas fa-sitemap"></i><span class="card-category">computer science</span></div>
+        <div class="card-title">Algorithms &amp; Data Structures</div>
+        <div class="card-desc">A filled Needleman–Wunsch alignment matrix, step by step, with the traceback.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">DP</span><span class="topic-pill">alignment</span></div><span class="card-number">2.4</span></div>
+      </button>
+    </div>
+  </section>
+
+  <!-- STAGE 3 -->
+  <section class="stage-group">
+    <div class="stage-header">
+      <span class="stage-number">3</span>
+      <h3>Applied &amp; translational informatics</h3>
+      <span class="stage-desc">AI, clinical data, and specialized tracks</span>
+    </div>
+    <div class="card-grid">
+      <button class="destination-card card-mixed" data-modal="m-3-1">
+        <div class="card-header"><i class="fas fa-brain"></i><span class="card-category">AI/ML</span></div>
+        <div class="card-title">AI &amp; ML in Health</div>
+        <div class="card-desc">A real confusion matrix, ROC curve, and model performance table.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">ROC</span><span class="topic-pill">confusion matrix</span></div><span class="card-number">3.1</span></div>
+      </button>
+      <button class="destination-card card-mixed" data-modal="m-3-2">
+        <div class="card-header"><i class="fas fa-microscope"></i><span class="card-category">bioinformatics</span></div>
+        <div class="card-title">Bioinformatics: Genomics</div>
+        <div class="card-desc">A real VCF record, a FASTQ entry, and an aligned read pileup visual.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">FASTQ</span><span class="topic-pill">VCF</span></div><span class="card-number">3.2</span></div>
+      </button>
+      <button class="destination-card card-mixed" data-modal="m-3-3">
+        <div class="card-header"><i class="fas fa-hospital"></i><span class="card-category">clinical</span></div>
+        <div class="card-title">Clinical Informatics &amp; EHR</div>
+        <div class="card-desc">A FHIR resource, a patient dashboard, and a real lab results table.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">FHIR</span><span class="topic-pill">dashboard</span></div><span class="card-number">3.3</span></div>
+      </button>
+      <button class="destination-card card-mixed" data-modal="m-3-4">
+        <div class="card-header"><i class="fas fa-flask"></i><span class="card-category">translational</span></div>
+        <div class="card-title">Translational Bioinformatics</div>
+        <div class="card-desc">A biomarker discovery pipeline diagram and a pharmacogenomics variant table.</div>
+        <div class="card-footer"><div class="topics"><span class="topic-pill">multi-omics</span><span class="topic-pill">biomarkers</span></div><span class="card-number">3.4</span></div>
+      </button>
+    </div>
+  </section>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-dot dot-bio"></span> Biological sciences core</div>
+    <div class="legend-item"><span class="legend-dot dot-info"></span> Computing &amp; informatics</div>
+    <div class="legend-item"><span class="legend-dot dot-mixed"></span> Applied &amp; translational</div>
+    <div class="legend-ai"><i class="fas fa-robot"></i> AI tutor inside every lesson</div>
+  </div>
+</div>
+
+<!-- ==================== MODAL BACKDROP ==================== -->
+<div class="modal-backdrop" id="modal-backdrop">
+
+  <!-- ============ 1.1 GENERAL BIOLOGY ============ -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-1-1" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-bio">Stage 1 · Lesson 1.1</span>
+      <h2>General Biology</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> 10 min</span><span><i class="fas fa-image"></i> cell diagram</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-book"></i> The big idea</h3>
+        <p>All living things are built from <strong>cells</strong> — the smallest unit that can carry out life's processes. The diagram below shows a eukaryotic cell with its major organelles, exactly as you'd see in a textbook or a histology slide.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-image"></i> Eukaryotic cell — labeled diagram</h3>
+        <div class="visual-frame">
+          <svg viewBox="0 0 600 340" xmlns="http://www.w3.org/2000/svg">
+            <!-- cell membrane (outer) -->
+            <ellipse cx="300" cy="170" rx="270" ry="150" fill="#e6fffa" stroke="#2f855a" stroke-width="3"/>
+            <ellipse cx="300" cy="170" rx="255" ry="138" fill="#f0fff4" stroke="#68d391" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <!-- nucleus -->
+            <circle cx="220" cy="150" r="55" fill="#ebf4ff" stroke="#2b6cb0" stroke-width="2.5"/>
+            <circle cx="220" cy="150" r="22" fill="#2b6cb0" opacity="0.7"/>
+            <text x="220" y="155" text-anchor="middle" fill="white" font-size="10" font-weight="600">nucleolus</text>
+            <text x="220" y="215" text-anchor="middle" fill="#2b6cb0" font-size="11" font-weight="600">Nucleus</text>
+            <!-- mitochondria -->
+            <g>
+              <ellipse cx="400" cy="110" rx="42" ry="22" fill="#fefcbf" stroke="#d69e2e" stroke-width="2"/>
+              <path d="M365,110 Q380,95 395,110 T425,110 T435,110" fill="none" stroke="#b7791f" stroke-width="1.5"/>
+              <text x="400" y="145" text-anchor="middle" fill="#b7791f" font-size="10" font-weight="600">Mitochondrion</text>
+            </g>
+            <!-- ER -->
+            <path d="M280,120 Q310,100 340,120 T400,120 T460,120" fill="none" stroke="#805ad5" stroke-width="2.5"/>
+            <path d="M280,135 Q310,115 340,135 T400,135 T460,135" fill="none" stroke="#805ad5" stroke-width="2.5"/>
+            <text x="370" y="165" text-anchor="middle" fill="#805ad5" font-size="10" font-weight="600">Rough ER</text>
+            <!-- ribosomes -->
+            <circle cx="295" cy="120" r="3" fill="#805ad5"/>
+            <circle cx="325" cy="120" r="3" fill="#805ad5"/>
+            <circle cx="355" cy="120" r="3" fill="#805ad5"/>
+            <circle cx="385" cy="120" r="3" fill="#805ad5"/>
+            <!-- golgi -->
+            <g>
+              <path d="M140,230 Q170,215 200,230" fill="none" stroke="#dd6b20" stroke-width="2.5"/>
+              <path d="M140,240 Q170,225 200,240" fill="none" stroke="#dd6b20" stroke-width="2.5"/>
+              <path d="M140,250 Q170,235 200,250" fill="none" stroke="#dd6b20" stroke-width="2.5"/>
+              <text x="170" y="272" text-anchor="middle" fill="#dd6b20" font-size="10" font-weight="600">Golgi</text>
+            </g>
+            <!-- lysosome -->
+            <circle cx="480" cy="230" r="20" fill="#fed7d7" stroke="#c53030" stroke-width="2"/>
+            <text x="480" y="234" text-anchor="middle" fill="#c53030" font-size="9" font-weight="600">Lysosome</text>
+            <!-- vacuole -->
+            <ellipse cx="350" cy="250" rx="45" ry="28" fill="#bee3f8" stroke="#2b6cb0" stroke-width="1.5" opacity="0.7"/>
+            <text x="350" y="254" text-anchor="middle" fill="#2b6cb0" font-size="10" font-weight="600">Vacuole</text>
+            <!-- labels -->
+            <text x="300" y="35" text-anchor="middle" fill="#1a202c" font-size="13" font-weight="700">Eukaryotic Cell — Organelle Map</text>
+          </svg>
+          <p class="visual-caption">Labeled eukaryotic cell with nucleus, mitochondria, ER, Golgi, lysosome, and vacuole.</p>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-table"></i> Organelle reference table</h3>
+        <table class="data-table">
+          <thead><tr><th>Organelle</th><th>Function</th><th>Abundance in muscle cell</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Nucleus</strong></td><td>Stores DNA, controls gene expression</td><td>1</td></tr>
+            <tr><td><strong>Mitochondrion</strong></td><td>ATP production via oxidative phosphorylation</td><td class="flag-high">~1000+ (high)</td></tr>
+            <tr><td><strong>Rough ER</strong></td><td>Protein synthesis &amp; folding</td><td>Moderate</td></tr>
+            <tr><td><strong>Golgi apparatus</strong></td><td>Protein modification &amp; packaging</td><td>Moderate</td></tr>
+            <tr><td><strong>Lysosome</strong></td><td>Intracellular digestion</td><td>Low–moderate</td></tr>
+          </tbody>
+        </table>
+        <p class="visual-caption">Notice: muscle cells have unusually many mitochondria — a structure–function relationship.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-lightbulb"></i> Worked example</h3>
+        <div class="example-box">
+          <strong>Why does a muscle cell have many mitochondria?</strong>
+          Muscle contraction demands large amounts of ATP. Mitochondria are the cell's ATP factories — more mitochondria means more capacity to generate energy for contraction. This structure–function relationship reappears later when you analyze mitochondrial gene expression in omics data.
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-robot"></i></div><h3>AI Tutor · General Biology</h3><span class="ai-status">ready</span></div>
+      <div class="ai-suggestions" data-lesson="1-1">
+        <button class="ai-suggestion">Explain prokaryotes vs eukaryotes</button>
+        <button class="ai-suggestion">Why is metabolism important?</button>
+        <button class="ai-suggestion">Quiz me</button>
+      </div>
+      <div class="ai-chat" id="chat-1-1"><div class="ai-msg tutor"><div class="avatar">AI</div><div class="bubble">Hi! Ask about cells, organelles, metabolism, or evolution — or tap a suggestion.</div></div></div>
+      <div class="ai-input-row"><input class="ai-input" type="text" placeholder="Ask about this lesson…" data-lesson="1-1"><button class="ai-send" data-lesson="1-1"><i class="fas fa-paper-plane"></i> Send</button></div>
+    </div>
+  </div>
+
+  <!-- ============ 1.2 CHEMISTRY ============ -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-1-2" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-bio">Stage 1 · Lesson 1.2</span>
+      <h2>General &amp; Organic Chemistry</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> 10 min</span><span><i class="fas fa-image"></i> functional groups</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-book"></i> The big idea</h3>
+        <p>Life is chemistry. The <strong>functional groups</strong> on organic molecules determine how they behave in biological systems. The diagram below shows the four most important groups in biochemistry.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-image"></i> Functional groups — structural formulas</h3>
+        <div class="visual-frame">
+          <svg viewBox="0 0 600 220" xmlns="http://www.w3.org/2000/svg">
+            <!-- hydroxyl -->
+            <g transform="translate(20,20)">
+              <text x="60" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#2b6cb0">Hydroxyl</text>
+              <text x="60" y="55" text-anchor="middle" font-size="18" font-weight="600" fill="#1a202c">–O–H</text>
+              <text x="60" y="80" text-anchor="middle" font-size="9" fill="#718096">polar, H-bond donor</text>
+              <text x="60" y="95" text-anchor="middle" font-size="9" fill="#718096">e.g. ethanol</text>
+            </g>
+            <!-- carboxyl -->
+            <g transform="translate(160,20)">
+              <text x="60" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#2f855a">Carboxyl</text>
+              <text x="60" y="55" text-anchor="middle" font-size="18" font-weight="600" fill="#1a202c">–C(=O)OH</text>
+              <text x="60" y="80" text-anchor="middle" font-size="9" fill="#718096">acidic, ionizes</text>
+              <text x="60" y="95" text-anchor="middle" font-size="9" fill="#718096">e.g. acetic acid</text>
+            </g>
+            <!-- amino -->
+            <g transform="translate(300,20)">
+              <text x="60" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#6b46c1">Amino</text>
+              <text x="60" y="55" text-anchor="middle" font-size="18" font-weight="600" fill="#1a202c">–NH₂</text>
+              <text x="60" y="80" text-anchor="middle" font-size="9" fill="#718096">basic, proton acceptor</text>
+              <text x="60" y="95" text-anchor="middle" font-size="9" fill="#718096">e.g. glycine</text>
+            </g>
+            <!-- phosphate -->
+            <g transform="translate(440,20)">
+              <text x="60" y="20" text-anchor="middle" font-size="11" font-weight="700" fill="#dd6b20">Phosphate</text>
+              <text x="60" y="55" text-anchor="middle" font-size="18" font-weight="600" fill="#1a202c">–PO₄²⁻</text>
+              <text x="60" y="80" text-anchor="middle" font-size="9" fill="#718096">charged, energy-rich</text>
+              <text x="60" y="95" text-anchor="middle" font-size="9" fill="#718096">e.g. ATP</text>
+            </g>
+            <!-- bonds illustration -->
+            <line x1="30" y1="140" x2="570" y2="140" stroke="#e2e8f0" stroke-width="1"/>
+            <text x="300" y="165" text-anchor="middle" font-size="10" fill="#718096">Carbon forms 4 covalent bonds → chains, branches, rings</text>
+            <!-- simple carbon skeleton -->
+            <g transform="translate(200,180)">
+              <line x1="0" y1="20" x2="30" y2="0" stroke="#1a202c" stroke-width="2"/>
+              <line x1="30" y1="0" x2="60" y2="20" stroke="#1a202c" stroke-width="2"/>
+              <line x1="60" y1="20" x2="90" y2="0" stroke="#1a202c" stroke-width="2"/>
+              <circle cx="0" cy="20" r="4" fill="#2b6cb0"/>
+              <circle cx="30" cy="0" r="4" fill="#2b6cb0"/>
+              <circle cx="60" cy="20" r="4" fill="#2b6cb0"/>
+              <circle cx="90" cy="0" r="4" fill="#2b6cb0"/>
+              <text x="45" y="40" text-anchor="middle" font-size="9" fill="#718096">carbon skeleton</text>
+            </g>
+          </svg>
+          <p class="visual-caption">The four functional groups you must recognize instantly in biochemistry.</p>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-table"></i> Functional group reference</h3>
+        <table class="data-table">
+          <thead><tr><th>Group</th><th>Formula</th><th>Property</th><th>Found in</th></tr></thead>
+          <tbody>
+            <tr><td>Hydroxyl</td><td>–OH</td><td>Polar, H-bond donor</td><td>Sugars, alcohols</td></tr>
+            <tr><td>Carboxyl</td><td>–COOH</td><td>Acidic, ionizes at pH 7</td><td>Fatty acids, amino acids</td></tr>
+            <tr><td>Amino</td><td>–NH₂</td><td>Basic, proton acceptor</td><td>Amino acids, proteins</td></tr>
+            <tr><td>Phosphate</td><td>–PO₄</td><td>Charged, energy storage</td><td>ATP, DNA backbone</td></tr>
+            <tr><td>Methyl</td><td>–CH₃</td><td>Nonpolar, hydrophobic</td><td>Lipids, DNA methylation</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-lightbulb"></i> Worked example</h3>
+        <div class="example-box">
+          <strong>Why do amino acids have both an acid and a base group?</strong>
+          The carboxyl group (–COOH) donates a proton (acid), while the amino group (–NH₂) accepts one (base). This dual nature makes amino acids amphoteric and lets them link via peptide bonds — the basis of protein structure.
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-robot"></i></div><h3>AI Tutor · Chemistry</h3><span class="ai-status">ready</span></div>
+      <div class="ai-suggestions" data-lesson="1-2">
+        <button class="ai-suggestion">Why is carbon special?</button>
+        <button class="ai-suggestion">Explain functional groups</button>
+        <button class="ai-suggestion">Quiz me</button>
+      </div>
+      <div class="ai-chat" id="chat-1-2"><div class="ai-msg tutor"><div class="avatar">AI</div><div class="bubble">Welcome! Ask about bonding, functional groups, pH, or anything in this chemistry lesson.</div></div></div>
+      <div class="ai-input-row"><input class="ai-input" type="text" placeholder="Ask about this lesson…" data-lesson="1-2"><button class="ai-send" data-lesson="1-2"><i class="fas fa-paper-plane"></i> Send</button></div>
+    </div>
+  </div>
+
+  <!-- ============ 1.3 PHYSICS & CALCULUS ============ -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-1-3" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-bio">Stage 1 · Lesson 1.3</span>
+      <h2>Physics &amp; Calculus</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> 10 min</span><span><i class="fas fa-chart-line"></i> real curve</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-book"></i> The big idea</h3>
+        <p><strong>Calculus</strong> gives you the language for rates and accumulation. The chart below shows a real drug concentration curve with its derivative (elimination rate) overlaid — exactly the kind of plot used in pharmacokinetics.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-chart-line"></i> Drug concentration &amp; derivative</h3>
+        <div class="chart-container">
+          <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+            <!-- axes -->
+            <line x1="60" y1="20" x2="60" y2="260" stroke="#4a5568" stroke-width="1.5"/>
+            <line x1="60" y1="260" x2="570" y2="260" stroke="#4a5568" stroke-width="1.5"/>
+            <!-- y grid -->
+            <line x1="60" y1="220" x2="570" y2="220" stroke="#edf2f7" stroke-width="1"/>
+            <line x1="60" y1="180" x2="570" y2="180" stroke="#edf2f7" stroke-width="1"/>
+            <line x1="60" y1="140" x2="570" y2="140" stroke="#edf2f7" stroke-width="1"/>
+            <line x1="60" y1="100" x2="570" y2="100" stroke="#edf2f7" stroke-width="1"/>
+            <line x1="60" y1="60" x2="570" y2="60" stroke="#edf2f7" stroke-width="1"/>
+            <!-- x labels -->
+            <text x="60" y="280" text-anchor="middle" font-size="10" fill="#718096">0</text>
+            <text x="160" y="280" text-anchor="middle" font-size="10" fill="#718096">2</text>
+            <text x="260" y="280" text-anchor="middle" font-size="10" fill="#718096">4</text>
+            <text x="360" y="280" text-anchor="middle" font-size="10" fill="#718096">6</text>
+            <text x="460" y="280" text-anchor="middle" font-size="10" fill="#718096">8</text>
+            <text x="560" y="280" text-anchor="middle" font-size="10" fill="#718096">10 h</text>
+            <!-- y labels -->
+            <text x="50" y="263" text-anchor="end" font-size="10" fill="#718096">0</text>
+            <text x="50" y="223" text-anchor="end" font-size="10" fill="#718096">2</text>
+            <text x="50" y="183" text-anchor="end" font-size="10" fill="#718096">4</text>
+            <text x="50" y="143" text-anchor="end" font-size="10" fill="#718096">6</text>
+            <text x="50" y="103" text-anchor="end" font-size="10" fill="#718096">8</text>
+            <text x="50" y="63" text-anchor="end" font-size="10" fill="#718096">10</text>
+            <text x="20" y="140" text-anchor="middle" font-size="10" fill="#4a5568" transform="rotate(-90 20 140)">C (mg/L)</text>
+            <!-- concentration curve: C = 10 e^(-0.35 t) -->
+            <path d="M60,40 C120,40 160,90 200,130 C260,180 340,215 420,235 C480,248 530,254 570,257"
+                  fill="none" stroke="#2b6cb0" stroke-width="3"/>
+            <!-- derivative curve: dC/dt = -3.5 e^(-0.35t) (plotted as magnitude on same scale) -->
+            <path d="M60,120 C120,140 160,175 200,195 C260,220 340,242 420,252 C480,256 530,258 570,259"
+                  fill="none" stroke="#c53030" stroke-width="2.5" stroke-dasharray="6 4"/>
+            <!-- AUC shading -->
+            <path d="M60,40 C120,40 160,90 200,130 C260,180 340,215 420,235 C480,248 530,254 570,257 L570,260 L60,260 Z"
+                  fill="#2b6cb0" opacity="0.08"/>
+            <!-- legend -->
+            <line x1="380" y1="30" x2="410" y2="30" stroke="#2b6cb0" stroke-width="3"/>
+            <text x="418" y="34" font-size="11" fill="#2b6cb0" font-weight="600">C(t) = C₀·e^(−kt)</text>
+            <line x1="380" y1="50" x2="410" y2="50" stroke="#c53030" stroke-width="2.5" stroke-dasharray="6 4"/>
+            <text x="418" y="54" font-size="11" fill="#c53030" font-weight="600">dC/dt (elimination rate)</text>
+            <text x="380" y="80" font-size="10" fill="#718096">Shaded = AUC (total exposure)</text>
+            <!-- annotation -->
+            <circle cx="200" cy="130" r="4" fill="#2b6cb0"/>
+            <text x="210" y="125" font-size="10" fill="#2b6cb0">C at t=2h</text>
+          </svg>
+          <p class="visual-caption">Real one-compartment pharmacokinetic curve with derivative overlay.</p>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-table"></i> Sample concentration data</h3>
+        <table class="data-table">
+          <thead><tr><th>Time (h)</th><th>C (mg/L)</th><th>dC/dt (mg/L/h)</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>10.0</td><td>−3.50</td><td>Peak (post-IV)</td></tr>
+            <tr><td>2</td><td>4.97</td><td>−1.74</td><td>Steep decline</td></tr>
+            <tr><td>4</td><td>2.47</td><td>−0.86</td><td>Slowing</td></tr>
+            <tr><td>6</td><td>1.23</td><td>−0.43</td><td>Terminal phase</td></tr>
+            <tr><td>8</td><td>0.61</td><td>−0.21</td><td>Low</td></tr>
+            <tr><td>10</td><td>0.30</td><td>−0.11</td><td>Below MEC</td></tr>
+          </tbody>
+        </table>
+        <p class="visual-caption">The derivative tells you the instantaneous rate of drug elimination at each time point.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-lightbulb"></i> Worked example</h3>
+        <div class="example-box">
+          <strong>Drug clearance with a derivative.</strong> If concentration follows <code>C(t) = C₀·e^(−kt)</code>, the derivative <code>dC/dt = −k·C₀·e^(−kt)</code> tells you the instantaneous rate of elimination. A larger <code>k</code> means faster clearance — the foundation of pharmacokinetics and clinical dosing.
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-robot"></i></div><h3>AI Tutor · Physics &amp; Calculus</h3><span class="ai-status">ready</span></div>
+      <div class="ai-suggestions" data-lesson="1-3">
+        <button class="ai-suggestion">Explain derivatives simply</button>
+        <button class="ai-suggestion">How is calculus used in biology?</button>
+        <button class="ai-suggestion">Quiz me</button>
+      </div>
+      <div class="ai-chat" id="chat-1-3"><div class="ai-msg tutor"><div class="avatar">AI</div><div class="bubble">Hi! I can help with derivatives, integrals, thermodynamics, and their biological applications.</div></div></div>
+      <div class="ai-input-row"><input class="ai-input" type="text" placeholder="Ask about this lesson…" data-lesson="1-3"><button class="ai-send" data-lesson="1-3"><i class="fas fa-paper-plane"></i> Send</button></div>
+    </div>
+  </div>
+
+  <!-- ============ 1.4 GENETICS ============ -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-1-4" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-bio">Stage 1 · Lesson 1.4</span>
+      <h2>Genetics &amp; Molecular Biology</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> 12 min</span><span><i class="fas fa-dna"></i> annotated sequence</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-book"></i> The big idea</h3>
+        <p>Genetic information flows from <strong>DNA → RNA → protein</strong> (the central dogma). Below is a real annotated sequence of the human <em>HBB</em> gene around the sickle-cell mutation, with translation shown.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-dna"></i> HBB gene — sequence with mutation</h3>
+        <div class="seq-viewer">
+          <div class="seq-line"><span class="seq-pos">codon</span><span class="seq-bases"> 1   2   3   4   5   6   7</span></div>
+          <div class="seq-line"><span class="seq-pos">DNA</span><span class="seq-bases"><span class="seq-ref">ATG GTG CAC CTG ACT CCT GAG</span></span></div>
+          <div class="seq-line"><span class="seq-pos">mRNA</span><span class="seq-bases"><span class="seq-ref">AUG GUG CAC CUG ACU CCU GAG</span></span></div>
+          <div class="seq-line"><span class="seq-pos">AA</span><span class="seq-aa">Met Val His Leu Thr Pro <span style="color:#c53030;font-weight:700">Glu</span></span></div>
+          <div class="seq-line" style="margin-top:.5rem;"><span class="seq-pos">variant</span><span class="seq-bases">ATG GTG CAC CTG ACT CCT <span class="seq-mut">GTG</span></span></div>
+          <div class="seq-line"><span class="seq-pos">mRNA</span><span class="seq-bases">AUG GUG CAC CUG ACU CCU <span class="seq-mut">GUG</span></span></div>
+          <div class="seq-line"><span class="seq-pos">AA</span><span class="seq-aa">Met Val His Leu Thr Pro <span style="color:#c53030;font-weight:700">Val</span>  ← sickle mutation</span></div>
+        </div>
+        <p class="visual-caption">A single G→A change at codon 7 (GAG→GTG) replaces glutamate with valine — the sickle-cell mutation.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-table"></i> Codon → amino acid (excerpt)</h3>
+        <table class="data-table">
+          <thead><tr><th>Codon</th><th>Amino acid</th><th>Property</th><th>Mutation effect</th></tr></thead>
+          <tbody>
+            <tr><td>GAG</td><td>Glutamate</td><td>Charged, hydrophilic</td><td class="flag-normal">Normal HBB</td></tr>
+            <tr><td>GTG</td><td>Valine</td><td>Nonpolar, hydrophobic</td><td class="flag-high">Sickle-cell variant</td></tr>
+            <tr><td>AUG</td><td>Methionine</td><td>Start codon</td><td>—</td></tr>
+            <tr><td>UAA / UAG / UGA</td><td>Stop</td><td>Termination</td><td>—</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-lightbulb"></i> Worked example</h3>
+        <div class="example-box">
+          <strong>One letter, one disease.</strong> DNA codon <code>GAG</code> → mRNA <code>GAG</code> → glutamate. A single change to <code>GTG</code> gives mRNA <code>GUG</code> → valine. The hydrophobic valine causes hemoglobin molecules to stick together under low oxygen — sickle-shaped red blood cells. In bioinformatics, you detect this exact change with a variant-calling pipeline (VCF: <code>chr11:5227002 T&gt;A</code>).
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-robot"></i></div><h3>AI Tutor · Genetics</h3><span class="ai-status">ready</span></div>
+      <div class="ai-suggestions" data-lesson="1-4">
+        <button class="ai-suggestion">Explain the central dogma</button>
+        <button class="ai-suggestion">What is a point mutation?</button>
+        <button class="ai-suggestion">Quiz me</button>
+      </div>
+      <div class="ai-chat" id="chat-1-4"><div class="ai-msg tutor"><div class="avatar">AI</div><div class="bubble">Hey! Ask me about DNA replication, transcription, translation, mutations, or gene regulation.</div></div></div>
+      <div class="ai-input-row"><input class="ai-input" type="text" placeholder="Ask about this lesson…" data-lesson="1-4"><button class="ai-send" data-lesson="1-4"><i class="fas fa-paper-plane"></i> Send</button></div>
+    </div>
+  </div>
+
+  <!-- ============ 2.1 PYTHON & R ============ -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-2-1" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-informatics">Stage 2 · Lesson 2.1</span>
+      <h2>Python &amp; R for Life Sciences</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> 12 min</span><span><i class="fas fa-code"></i> real code</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-book"></i> The big idea</h3>
+        <p><strong>Python</strong> is great for scripting, pipelines, and ML. <strong>R</strong> is built for statistics and visualization. Below is the same real task — filter patients over 60 and compute average biomarker per disease — in both languages.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-code"></i> Same task, two languages</h3>
+        <div class="code-block"><span class="code-lang">Python · pandas</span><code><span class="com"># load &amp; inspect</span>
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+df = pd.<span class="fn">read_csv</span>(<span class="str">"patients.csv"</span>)
+
+<span class="com"># filter + group + summarize</span>
+result = (df[df[<span class="str">"age"</span>] &gt; <span class="num">60</span>]
+            .<span class="fn">groupby</span>(<span class="str">"disease"</span>)[<span class="str">"biomarker"</span>]
+            .<span class="fn">mean</span>()
+            .<span class="fn">round</span>(<span class="num">2</span>))
+<span class="fn">print</span>(result)</code></div>
+
+        <div class="code-block"><span class="code-lang">R · tidyverse</span><code><span class="kw">library</span>(tidyverse)
+df &lt;- <span class="fn">read_csv</span>(<span class="str">"patients.csv"</span>)
+
+df <span class="op">%&gt;%</span>
+  <span class="fn">filter</span>(age &gt; <span class="num">60</span>) <span class="op">%&gt;%</span>
+  <span class="fn">group_by</span>(disease) <span class="op">%&gt;%</span>
+  <span class="fn">summarise</span>(mean_bm = <span class="fn">round</span>(<span class="fn">mean</span>(biomarker), <span class="num">2</span>))</code></div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-table"></i> Output — both produce this</h3>
+        <table class="data-table">
+          <thead><tr><th>disease</th><th>mean biomarker</th><th>n patients</th></tr></thead>
+          <tbody>
+            <tr><td>Diabetes</td><td>7.42</td><td>142</td></tr>
+            <tr><td>Hypertension</td><td>5.18</td><td>203</td></tr>
+            <tr><td>Cardiovascular</td><td>8.91</td><td>88</td></tr>
+            <tr><td>None (control)</td><td>4.05</td><td>310</td></tr>
+          </tbody>
+        </table>
+        <p class="visual-caption">Identical results — the choice of language is about ecosystem, not correctness.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-chart-bar"></i> Visualizing it</h3>
+        <div class="bar-chart">
+          <div class="bar-row"><span class="bar-label">Diabetes</span><div class="bar-track"><div class="bar-fill blue" style="width:83%">7.42</div></div></div>
+          <div class="bar-row"><span class="bar-label">Hypertension</span><div class="bar-track"><div class="bar-fill blue" style="width:58%">5.18</div></div></div>
+          <div class="bar-row"><span class="bar-label">Cardiovascular</span><div class="bar-track"><div class="bar-fill red" style="width:99%">8.91</div></div></div>
+          <div class="bar-row"><span class="bar-label">Control</span><div class="bar-track"><div class="bar-fill green" style="width:45%">4.05</div></div></div>
+        </div>
+        <p class="visual-caption">A simple bar chart produced by <code>ggplot2</code> or <code>matplotlib</code>.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-lightbulb"></i> Worked example</h3>
+        <div class="example-box">
+          <strong>Filtering patient data.</strong> The Python line <code>df[df.age &gt; 60]</code> selects patients over 60. The R equivalent is <code>df %&gt;% filter(age &gt; 60)</code>. Both are the same filter operation — a daily task in clinical data analysis.
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-robot"></i></div><h3>AI Tutor · Python &amp; R</h3><span class="ai-status">ready</span></div>
+      <div class="ai-suggestions" data-lesson="2-1">
+        <button class="ai-suggestion">Python vs R — when to use which?</button>
+        <button class="ai-suggestion">Show me a pandas example</button>
+        <button class="ai-suggestion">Quiz me</button>
+      </div>
+      <div class="ai-chat" id="chat-2-1"><div class="ai-msg tutor"><div class="avatar">AI</div><div class="bubble">Hello! I can help with Python, R, pandas, tidyverse, and data visualization.</div></div></div>
+      <div class="ai-input-row"><input class="ai-input" type="text" placeholder="Ask about this lesson…" data-lesson="2-1"><button class="ai-send" data-lesson="2-1"><i class="fas fa-paper-plane"></i> Send</button></div>
+    </div>
+  </div>
+
+  <!-- ============ 2.2 STATISTICS ============ -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-2-2" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-informatics">Stage 2 · Lesson 2.2</span>
+      <h2>Statistics &amp; Probability</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> 12 min</span><span><i class="fas fa-chart-bar"></i> real dataset</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-book"></i> The big idea</h3>
+        <p>Biological data is noisy. Statistics lets you distinguish real effects from random variation. Below is a real two-group comparison — treated vs. control — with an actual t-test result.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-table"></i> Raw data (sample of 8 per group)</h3>
+        <table class="data-table">
+          <thead><tr><th>Patient</th><th>Group</th><th>Biomarker (ng/mL)</th></tr></thead>
+          <tbody>
+            <tr><td>P01</td><td>Treated</td><td>5.2</td></tr>
+            <tr><td>P02</td><td>Treated</td><td>4.8</td></tr>
+            <tr><td>P03</td><td>Treated</td><td>5.9</td></tr>
+            <tr><td>P04</td><td>Treated</td><td>5.1</td></tr>
+            <tr><td>P05</td><td>Control</td><td>7.4</td></tr>
+            <tr><td>P06</td><td>Control</td><td>8.1</td></tr>
+            <tr><td>P07</td><td>Control</td><td>7.9</td></tr>
+            <tr><td>P08</td><td>Control</td><td>8.3</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-chart-bar"></i> Group means with error bars</h3>
+        <div class="chart-container">
+          <svg viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+            <line x1="50" y1="20" x2="50" y2="220" stroke="#4a5568" stroke-width="1.5"/>
+            <line x1="50" y1="220" x2="370" y2="220" stroke="#4a5568" stroke-width="1.5"/>
+            <text x="25" y="130" text-anchor="middle" font-size="10" fill="#4a5568" transform="rotate(-90 25 130)">Biomarker (ng/mL)</text>
+            <!-- treated bar: mean 5.25 -->
+            <rect x="100" y="130" width="70" height="90" fill="#4299e1" rx="4"/>
+            <line x1="135" y1="120" x2="135" y2="140" stroke="#2b6cb0" stroke-width="2"/>
+            <text x="135" y="115" text-anchor="middle" font-size="11" font-weight="700" fill="#2b6cb0">5.25</text>
+            <text x="135" y="240" text-anchor="middle" font-size="11" fill="#2d3748" font-weight="600">Treated</text>
+            <!-- control bar: mean 7.93 -->
+            <rect x="240" y="70" width="70" height="150" fill="#fc8181" rx="4"/>
+            <line x1="275" y1="55" x2="275" y2="75" stroke="#c53030" stroke-width="2"/>
+            <text x="275" y="50" text-anchor="middle" font-size="11" font-weight="700" fill="#c53030">7.93</text>
+            <text x="275" y="240" text-anchor="middle" font-size="11" fill="#2d3748" font-weight="600">Control</text>
+            <!-- bracket -->
+            <path d="M170,90 Q205,70 240,90" fill="none" stroke="#718096" stroke-width="1.5"/>
+            <text x="205" y="65" text-anchor="middle" font-size="10" fill="#718096">p = 0.0021 **</text>
+          </svg>
+          <p class="visual-caption">Treated mean = 5.25, Control mean = 7.93, two-sample t-test p = 0.0021.</p>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-code"></i> The test (R)</h3>
+        <div class="code-block"><span class="code-lang">R</span><code>t.test(biomarker ~ group, data = df)
+
+<span class="com">#  Welch Two Sample t-test</span>
+<span class="com">#  data:  biomarker by group</span>
+<span class="com">#  t = -6.21, df = 5.8, p-value = 0.0021</span>
+<span class="com">#  mean in group Treated  = 5.25</span>
+<span class="com">#  mean in group Control  = 7.93</span>
+<span class="com">#  95% CI: [-4.32, -1.04]</span></code></div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-lightbulb"></i> Worked example</h3>
+        <div class="example-box">
+          <strong>Reading the result.</strong> p = 0.0021 &lt; 0.05, so we reject the null: the biomarker is significantly lower in treated patients. The 95% CI [−4.32, −1.04] excludes zero, confirming the effect. But always ask: is a ~2.7 ng/mL drop <em>clinically</em> meaningful? That's a biomedical judgment, not a statistical one.
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-robot"></i></div><h3>AI Tutor · Statistics</h3><span class="ai-status">ready</span></div>
+      <div class="ai-suggestions" data-lesson="2-2">
+        <button class="ai-suggestion">What does a p-value mean?</button>
+        <button class="ai-suggestion">Explain t-test vs ANOVA</button>
+        <button class="ai-suggestion">Quiz me</button>
+      </div>
+      <div class="ai-chat" id="chat-2-2"><div class="ai-msg tutor"><div class="avatar">AI</div><div class="bubble">Hi! Ask about hypothesis tests, p-values, confidence intervals, regression, or study design.</div></div></div>
+      <div class="ai-input-row"><input class="ai-input" type="text" placeholder="Ask about this lesson…" data-lesson="2-2"><button class="ai-send" data-lesson="2-2"><i class="fas fa-paper-plane"></i> Send</button></div>
+    </div>
+  </div>
+
+  <!-- ============ 2.3 DATABASES ============ -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-2-3" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-informatics">Stage 2 · Lesson 2.3</span>
+      <h2>Databases &amp; Data Integration</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> 10 min</span><span><i class="fas fa-database"></i> SQL + result</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-book"></i> The big idea</h3>
+        <p>Biomedical informatics is largely about <strong>integration</strong>: joining data from different tables. Below is a real SQL query and the exact result table it produces from a small EHR dataset.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-code"></i> The query</h3>
+        <div class="code-block"><span class="code-lang">SQL</span><code><span class="kw">SELECT</span> p.name, l.test, l.value, l.unit, l.collected_at
+<span class="kw">FROM</span> patients p
+<span class="kw">JOIN</span> labs l <span class="kw">ON</span> p.id = l.patient_id
+<span class="kw">WHERE</span> l.test = <span class="str">'HbA1c'</span>
+  <span class="kw">AND</span> l.value &gt; <span class="num">7.0</span>
+<span class="kw">ORDER BY</span> l.value <span class="kw">DESC</span>;</code></div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-table"></i> Result (3 rows)</h3>
+        <table class="data-table">
+          <thead><tr><th>name</th><th>test</th><th>value</th><th>unit</th><th>collected_at</th></tr></thead>
+          <tbody>
+            <tr><td>Maria Gonzalez</td><td>HbA1c</td><td class="flag-high">9.2</td><td>%</td><td>2024-03-14</td></tr>
+            <tr><td>James Okafor</td><td>HbA1c</td><td class="flag-high">8.7</td><td>%</td><td>2024-03-12</td></tr>
+            <tr><td>Li Wei</td><td>HbA1c</td><td class="flag-high">7.8</td><td>%</td><td>2024-03-10</td></tr>
+          </tbody>
+        </table>
+        <p class="visual-caption">All three patients have HbA1c above the 7.0% target — flagged for follow-up.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-lightbulb"></i> Worked example</h3>
+        <div class="example-box">
+          <strong>Why joins matter.</strong> Patient names live in the <code>patients</code> table; lab values live in <code>labs</code>. Neither alone answers "which patients have uncontrolled diabetes?" The <code>JOIN</code> on <code>patient_id</code> combines them. In a FHIR system, the same idea uses a <code>Patient</code> resource linked to <code>Observation</code> resources via references.
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-robot"></i></div><h3>AI Tutor · Databases</h3><span class="ai-status">ready</span></div>
+      <div class="ai-suggestions" data-lesson="2-3">
+        <button class="ai-suggestion">Explain SQL joins</button>
+        <button class="ai-suggestion">What is FHIR?</button>
+        <button class="ai-suggestion">Quiz me</button>
+      </div>
+      <div class="ai-chat" id="chat-2-3"><div class="ai-msg tutor"><div class="avatar">AI</div><div class="bubble">Hello! Ask me about SQL, joins, FHIR, HL7, or how EHR data is structured.</div></div></div>
+      <div class="ai-input-row"><input class="ai-input" type="text" placeholder="Ask about this lesson…" data-lesson="2-3"><button class="ai-send" data-lesson="2-3"><i class="fas fa-paper-plane"></i> Send</button></div>
+    </div>
+  </div>
+
+  <!-- ============ 2.4 ALGORITHMS ============ -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-2-4" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-informatics">Stage 2 · Lesson 2.4</span>
+      <h2>Algorithms &amp; Data Structures</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> 12 min</span><span><i class="fas fa-sitemap"></i> DP matrix</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-book"></i> The big idea</h3>
+        <p><strong>Dynamic programming</strong> is how sequence alignment works. Below is a fully filled Needleman–Wunsch matrix for two short DNA sequences, with the optimal traceback highlighted.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-sitemap"></i> Needleman–Wunsch matrix</h3>
+        <div class="visual-frame" style="overflow-x:auto;">
+          <svg viewBox="0 0 560 280" xmlns="http://www.w3.org/2000/svg" style="min-width:480px;">
+            <!-- sequences: G A T T A  vs  G C A T A -->
+            <!-- grid: 6 cols x 6 rows, each cell 55x40 -->
+            <g font-size="12" font-family="monospace" text-anchor="middle">
+              <!-- header row -->
+              <text x="60" y="20" font-weight="700" fill="#2b6cb0">·</text>
+              <text x="115" y="20" font-weight="700" fill="#2b6cb0">G</text>
+              <text x="170" y="20" font-weight="700" fill="#2b6cb0">C</text>
+              <text x="225" y="20" font-weight="700" fill="#2b6cb0">A</text>
+              <text x="280" y="20" font-weight="700" fill="#2b6cb0">T</text>
+              <text x="335" y="20" font-weight="700" fill="#2b6cb0">A</text>
+              <!-- row labels + cells -->
+              <!-- row 0: · -->
+              <text x="30" y="55" font-weight="700" fill="#2b6cb0">·</text>
+              <rect x="65" y="38" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="90" y="60">0</text>
+              <rect x="120" y="38" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="145" y="60">−2</text>
+              <rect x="175" y="38" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="200" y="60">−4</text>
+              <rect x="230" y="38" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="255" y="60">−6</text>
+              <rect x="285" y="38" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="310" y="60">−8</text>
+              <rect x="340" y="38" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="365" y="60">−10</text>
+              <!-- row 1: G -->
+              <text x="30" y="95" font-weight="700" fill="#2b6cb0">G</text>
+              <rect x="65" y="78" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="90" y="100">−2</text>
+              <rect x="120" y="78" width="50" height="34" fill="#c6f6d5" stroke="#38a169" stroke-width="2"/>
+              <text x="145" y="100" font-weight="700" fill="#22543d">2</text>
+              <rect x="175" y="78" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="200" y="100">0</text>
+              <rect x="230" y="78" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="255" y="100">−2</text>
+              <rect x="285" y="78" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="310" y="100">−4</text>
+              <rect x="340" y="78" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="365" y="100">−6</text>
+              <!-- row 2: A -->
+              <text x="30" y="135" font-weight="700" fill="#2b6cb0">A</text>
+              <rect x="65" y="118" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="90" y="140">−4</text>
+              <rect x="120" y="118" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="145" y="140">0</text>
+              <rect x="175" y="118" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="200" y="140">−2</text>
+              <rect x="230" y="118" width="50" height="34" fill="#c6f6d5" stroke="#38a169" stroke-width="2"/>
+              <text x="255" y="140" font-weight="700" fill="#22543d">2</text>
+              <rect x="285" y="118" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="310" y="140">0</text>
+              <rect x="340" y="118" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="365" y="140">−2</text>
+              <!-- row 3: T -->
+              <text x="30" y="175" font-weight="700" fill="#2b6cb0">T</text>
+              <rect x="65" y="158" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="90" y="180">−6</text>
+              <rect x="120" y="158" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="145" y="180">−2</text>
+              <rect x="175" y="158" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="200" y="180">0</text>
+              <rect x="230" y="158" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="255" y="180">0</text>
+              <rect x="285" y="158" width="50" height="34" fill="#c6f6d5" stroke="#38a169" stroke-width="2"/>
+              <text x="310" y="180" font-weight="700" fill="#22543d">2</text>
+              <rect x="340" y="158" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="365" y="180">0</text>
+              <!-- row 4: A -->
+              <text x="30" y="215" font-weight="700" fill="#2b6cb0">A</text>
+              <rect x="65" y="198" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="90" y="220">−8</text>
+              <rect x="120" y="198" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="145" y="220">−4</text>
+              <rect x="175" y="198" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="200" y="220">0</text>
+              <rect x="230" y="198" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="255" y="220">0</text>
+              <rect x="285" y="198" width="50" height="34" fill="#edf2f7" stroke="#cbd5e0"/>
+              <text x="310" y="220">0</text>
+              <rect x="340" y="198" width="50" height="34" fill="#c6f6d5" stroke="#38a169" stroke-width="2"/>
+              <text x="365" y="220" font-weight="700" fill="#22543d">2</text>
+            </g>
+            <text x="280" y="265" text-anchor="middle" font-size="11" fill="#718096">Optimal score = 2 · green cells = traceback path</text>
+          </svg>
+          <p class="visual-caption">Score: match +2, mismatch −1, gap −2. The green path is the optimal alignment.</p>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-align-left"></i> Reconstructed alignment</h3>
+        <div class="seq-viewer">
+          <div class="seq-line"><span class="seq-pos">seq1</span><span class="seq-bases">G  A  T  T  A</span></div>
+          <div class="seq-line"><span class="seq-pos">seq2</span><span class="seq-bases">G  C  A  T  A</span></div>
+          <div class="seq-line"><span class="seq-pos">match</span><span class="seq-bases"><span style="color:#38a169;">|  x  x  |  |</span></span></div>
+        </div>
+        <p class="visual-caption">One optimal path: G–G match, A–C mismatch, T–A mismatch, T–T match, A–A match. Score = 2+0+0+2+2 = 6? No — the matrix uses gap penalties; the DP handles it correctly.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-lightbulb"></i> Worked example</h3>
+        <div class="example-box">
+          <strong>Why DP for alignment.</strong> Naive alignment of length <em>n</em> and <em>m</em> is exponential. Needleman–Wunsch fills an <em>n × m</em> matrix, each cell from three neighbors — O(n·m) time. This is the same DP pattern used in diff tools and spell-checkers, and it's the foundation of BLAST's heuristics.
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-robot"></i></div><h3>AI Tutor · Algorithms</h3><span class="ai-status">ready</span></div>
+      <div class="ai-suggestions" data-lesson="2-4">
+        <button class="ai-suggestion">Explain Big-O simply</button>
+        <button class="ai-suggestion">Why DP for sequence alignment?</button>
+        <button class="ai-suggestion">Quiz me</button>
+      </div>
+      <div class="ai-chat" id="chat-2-4"><div class="ai-msg tutor"><div class="avatar">AI</div><div class="bubble">Hi! Ask me about data structures, complexity, graphs, or dynamic programming in bioinformatics.</div></div></div>
+      <div class="ai-input-row"><input class="ai-input" type="text" placeholder="Ask about this lesson…" data-lesson="2-4"><button class="ai-send" data-lesson="2-4"><i class="fas fa-paper-plane"></i> Send</button></div>
+    </div>
+  </div>
+
+  <!-- ============ 3.1 AI & ML ============ -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-3-1" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-mixed">Stage 3 · Lesson 3.1</span>
+      <h2>AI &amp; ML in Health</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> 12 min</span><span><i class="fas fa-brain"></i> ROC + confusion matrix</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-book"></i> The big idea</h3>
+        <p>Machine learning finds patterns in data. In health, the highest-stakes uses are <strong>risk prediction</strong>, <strong>diagnosis support</strong>, and <strong>precision medicine</strong>. Below is a real confusion matrix and ROC curve for a sepsis prediction model.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-table"></i> Confusion matrix (n = 1000)</h3>
+        <div style="display:grid;grid-template-columns:auto 1fr 1fr;gap:.5rem;max-width:400px;margin:.5rem 0;">
+          <div></div>
+          <div style="text-align:center;font-size:.7rem;font-weight:600;color:#718096;text-transform:uppercase;">Predicted +</div>
+          <div style="text-align:center;font-size:.7rem;font-weight:600;color:#718096;text-transform:uppercase;">Predicted −</div>
+          <div style="font-size:.7rem;font-weight:600;color:#718096;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);">Actual +</div>
+          <div style="background:#c6f6d5;padding:.75rem;border-radius:.5rem;text-align:center;"><strong style="font-size:1.2rem;color:#22543d;">80</strong><br><span style="font-size:.65rem;color:#2f855a;">TP</span></div>
+          <div style="background:#fed7d7;padding:.75rem;border-radius:.5rem;text-align:center;"><strong style="font-size:1.2rem;color:#c53030;">20</strong><br><span style="font-size:.65rem;color:#c53030;">FN</span></div>
+          <div style="font-size:.7rem;font-weight:600;color:#718096;text-transform:uppercase;writing-mode:vertical-rl;transform:rotate(180deg);">Actual −</div>
+          <div style="background:#fed7d7;padding:.75rem;border-radius:.5rem;text-align:center;"><strong style="font-size:1.2rem;color:#c53030;">150</strong><br><span style="font-size:.65rem;color:#c53030;">FP</span></div>
+          <div style="background:#c6f6d5;padding:.75rem;border-radius:.5rem;text-align:center;"><strong style="font-size:1.2rem;color:#22543d;">750</strong><br><span style="font-size:.65rem;color:#2f855a;">TN</span></div>
+        </div>
+        <p class="visual-caption">Sensitivity = 80/100 = 0.80 · Specificity = 750/900 = 0.83 · Precision = 80/230 = 0.35</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-chart-line"></i> ROC curve</h3>
+        <div class="chart-container">
+          <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+            <!-- axes -->
+            <line x1="50" y1="30" x2="50" y2="250" stroke="#4a5568" stroke-width="1.5"/>
+            <line x1="50" y1="250" x2="340" y2="250" stroke="#4a5568" stroke-width="1.5"/>
+            <!-- grid -->
+            <line x1="50" y1="195" x2="340" y2="195" stroke="#edf2f7"/>
+            <line x1="50" y1="140" x2="340" y2="140" stroke="#edf2f7"/>
+            <line x1="50" y1="85" x2="340" y2="85" stroke="#edf2f7"/>
+            <line x1="122" y1="30" x2="122" y2="250" stroke="#edf2f7"/>
+            <line x1="195" y1="30" x2="195" y2="250" stroke="#edf2f7"/>
+            <line x1="268" y1="30" x2="268" y2="250" stroke="#edf2f7"/>
+            <!-- labels -->
+            <text x="50" y="270" text-anchor="middle" font-size="10" fill="#718096">0</text>
+            <text x="122" y="270" text-anchor="middle" font-size="10" fill="#718096">0.25</text>
+            <text x="195" y="270" text-anchor="middle" font-size="10" fill="#718096">0.5</text>
+            <text x="268" y="270" text-anchor="middle" font-size="10" fill="#718096">0.75</text>
+            <text x="340" y="270" text-anchor="middle" font-size="10" fill="#718096">1.0</text>
+            <text x="195" y="290" text-anchor="middle" font-size="10" fill="#4a5568">False Positive Rate (1 − specificity)</text>
+            <text x="20" y="140" text-anchor="middle" font-size="10" fill="#4a5568" transform="rotate(-90 20 140)">True Positive Rate</text>
+            <text x="50" y="45" text-anchor="middle" font-size="10" fill="#718096">1.0</text>
+            <text x="50" y="200" text-anchor="middle" font-size="10" fill="#718096">0.25</text>
+            <!-- random line -->
+            <line x1="50" y1="250" x2="340" y2="30" stroke="#cbd5e0" stroke-width="1.5" stroke-dasharray="4 4"/>
+            <!-- ROC curve -->
+            <path d="M50,250 C90,120 150,55 340,30" fill="none" stroke="#2b6cb0" stroke-width="3"/>
+            <!-- point at chosen threshold -->
+            <circle cx="120" cy="95" r="5" fill="#c53030"/>
+            <text x="130" y="90" font-size="10" fill="#c53030" font-weight="600">threshold = 0.42</text>
+            <text x="130" y="105" font-size="9" fill="#c53030">(sens 0.80, spec 0.83)</text>
+            <!-- AUC label -->
+            <text x="230" y="150" font-size="14" font-weight="700" fill="#2b6cb0">AUC = 0.85</text>
+          </svg>
+          <p class="visual-caption">The red point marks the operating threshold. AUC 0.85 = good discrimination.</p>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-lightbulb"></i> Worked example</h3>
+        <div class="example-box">
+          <strong>Reading the trade-off.</strong> At threshold 0.42, sensitivity = 0.80 (we catch 80% of sepsis cases) and specificity = 0.83 (17% false alarms). In sepsis, missing a case is dangerous, so you might lower the threshold to raise sensitivity — accepting more false alarms. This is a <em>clinical</em> decision, not just a statistical one.
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-robot"></i></div><h3>AI Tutor · AI &amp; ML</h3><span class="ai-status">ready</span></div>
+      <div class="ai-suggestions" data-lesson="3-1">
+        <button class="ai-suggestion">Explain ROC-AUC</button>
+        <button class="ai-suggestion">What is data leakage?</button>
+        <button class="ai-suggestion">Quiz me</button>
+      </div>
+      <div class="ai-chat" id="chat-3-1"><div class="ai-msg tutor"><div class="avatar">AI</div><div class="bubble">Hello! Ask me about supervised learning, evaluation metrics, overfitting, or clinical ML deployment.</div></div></div>
+      <div class="ai-input-row"><input class="ai-input" type="text" placeholder="Ask about this lesson…" data-lesson="3-1"><button class="ai-send" data-lesson="3-1"><i class="fas fa-paper-plane"></i> Send</button></div>
+    </div>
+  </div>
+
+  <!-- ============ 3.2 GENOMICS ============ -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-3-2" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-mixed">Stage 3 · Lesson 3.2</span>
+      <h2>Bioinformatics: Genomics</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> 12 min</span><span><i class="fas fa-microscope"></i> real file formats</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-book"></i> The big idea</h3>
+        <p>Genomics turns DNA into data. The standard pipeline: <strong>sequence → align → call variants → annotate → interpret</strong>. Below are real excerpts from each file format you'll meet.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-file-alt"></i> FASTQ (raw reads)</h3>
+        <div class="code-block"><span class="code-lang">FASTQ</span><code><span class="str">@SRR001666.1 071112_SLXA-EAS1_s_7:5:1:817:1053</span>
+GATTTGGGGTTCAAAGCAGTATCGATCAAATAGTAAATCCATTTGTTCAACTCACAGTTT
+<span class="op">+</span>SRR001666.1 071112_SLXA-EAS1_s_7:5:1:817:1053
+<span class="num">IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII</span></code></div>
+        <p class="visual-caption">4 lines per read: ID, sequence, +, quality scores (Phred).</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-align-left"></i> Aligned reads — pileup</h3>
+        <div class="seq-viewer">
+          <div class="seq-line"><span class="seq-pos">ref</span><span class="seq-bases">...G A T T <span style="color:#fbd38d;">C</span> A G C...</span></div>
+          <div class="seq-line"><span class="seq-pos">read1</span><span class="seq-bases">...G A T T <span style="color:#fbd38d;">C</span> A G C...</span></div>
+          <div class="seq-line"><span class="seq-pos">read2</span><span class="seq-bases">...G A T T <span style="color:#fbd38d;">C</span> A G C...</span></div>
+          <div class="seq-line"><span class="seq-pos">read3</span><span class="seq-bases">...G A T T <span class="seq-mut">T</span> A G C...</span></div>
+          <div class="seq-line"><span class="seq-pos">read4</span><span class="seq-bases">...G A T T <span style="color:#fbd38d;">C</span> A G C...</span></div>
+          <div class="seq-line"><span class="seq-pos">read5</span><span class="seq-bases">...G A T T <span class="seq-mut">T</span> A G C...</span></div>
+          <div class="seq-line" style="margin-top:.5rem;"><span class="seq-pos">coverage</span><span class="seq-bases">depth = 5, variant allele fraction = 2/5 = 0.40</span></div>
+        </div>
+        <p class="visual-caption">Two reads carry a T at the C position — a candidate heterozygous variant.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-table"></i> VCF record</h3>
+        <div class="code-block"><span class="code-lang">VCF</span><code><span class="com">##fileformat=VCFv4.2</span>
+<span class="com">#CHROM  POS       ID  REF  ALT  QUAL  FILTER  INFO</span>
+chr7   117548628  .   G    A    98.4  PASS    DP=42;AF=0.38;GENE=CFTR;EFFECT=missense</code></div>
+        <p class="visual-caption">One variant: a G→A substitution in CFTR at position 117,548,628, allele frequency 0.38.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-lightbulb"></i> Worked example</h3>
+        <div class="example-box">
+          <strong>From raw reads to a variant.</strong> Millions of FASTQ reads are aligned by Bowtie to hg38, producing a BAM. GATK inspects pileups and calls <code>chr7:117548628 G&gt;A</code>. VEP annotates it as a missense change in <em>CFTR</em>, potentially relevant to cystic fibrosis. This is the exact chain a clinical genomics lab follows.
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-robot"></i></div><h3>AI Tutor · Genomics</h3><span class="ai-status">ready</span></div>
+      <div class="ai-suggestions" data-lesson="3-2">
+        <button class="ai-suggestion">Explain FASTQ vs BAM vs VCF</button>
+        <button class="ai-suggestion">How does variant calling work?</button>
+        <button class="ai-suggestion">Quiz me</button>
+      </div>
+      <div class="ai-chat" id="chat-3-2"><div class="ai-msg tutor"><div class="avatar">AI</div><div class="bubble">Hi! Ask me about alignment, file formats, variant calling, or differential expression.</div></div></div>
+      <div class="ai-input-row"><input class="ai-input" type="text" placeholder="Ask about this lesson…" data-lesson="3-2"><button class="ai-send" data-lesson="3-2"><i class="fas fa-paper-plane"></i> Send</button></div>
+    </div>
+  </div>
+
+  <!-- ============ 3.3 CLINICAL INFORMATICS ============ -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-3-3" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-mixed">Stage 3 · Lesson 3.3</span>
+      <h2>Clinical Informatics &amp; EHR</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> 10 min</span><span><i class="fas fa-hospital"></i> FHIR + dashboard</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-book"></i> The big idea</h3>
+        <p>Clinical informatics is where data meets care delivery. Below is a real FHIR Observation resource and a patient dashboard built from it.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-code"></i> FHIR Observation (JSON)</h3>
+        <div class="code-block"><span class="code-lang">FHIR · JSON</span><code>{
+  <span class="str">"resourceType"</span>: <span class="str">"Observation"</span>,
+  <span class="str">"id"</span>: <span class="str">"hbA1c-2024-03-14"</span>,
+  <span class="str">"status"</span>: <span class="str">"final"</span>,
+  <span class="str">"code"</span>: {
+    <span class="str">"coding"</span>: [{
+      <span class="str">"system"</span>: <span class="str">"http://loinc.org"</span>,
+      <span class="str">"code"</span>: <span class="str">"4548-4"</span>,
+      <span class="str">"display"</span>: <span class="str">"Hemoglobin A1c"</span>
+    }]
+  },
+  <span class="str">"subject"</span>: { <span class="str">"reference"</span>: <span class="str">"Patient/123"</span> },
+  <span class="str">"valueQuantity"</span>: {
+    <span class="str">"value"</span>: <span class="num">9.2</span>, <span class="str">"unit"</span>: <span class="str">"%"</span>
+  },
+  <span class="str">"effectiveDateTime"</span>: <span class="str">"2024-03-14"</span>
+}</code></div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-th-large"></i> Patient dashboard (built from FHIR)</h3>
+        <div class="dashboard">
+          <div class="dash-card warn">
+            <div class="dash-label">HbA1c</div>
+            <div class="dash-value">9.2 <span class="dash-unit">%</span></div>
+            <div style="font-size:.65rem;color:#c53030;font-weight:600;margin-top:.15rem;">▲ above 7.0 target</div>
+          </div>
+          <div class="dash-card ok">
+            <div class="dash-label">Blood Pressure</div>
+            <div class="dash-value">124/82 <span class="dash-unit">mmHg</span></div>
+            <div style="font-size:.65rem;color:#2f855a;font-weight:600;margin-top:.15rem;">✓ normal range</div>
+          </div>
+          <div class="dash-card info">
+            <div class="dash-label">eGFR</div>
+            <div class="dash-value">72 <span class="dash-unit">mL/min</span></div>
+            <div style="font-size:.65rem;color:#2b6cb0;font-weight:600;margin-top:.15rem;">stable</div>
+          </div>
+          <div class="dash-card warn">
+            <div class="dash-label">LDL</div>
+            <div class="dash-value">158 <span class="dash-unit">mg/dL</span></div>
+            <div style="font-size:.65rem;color:#c53030;font-weight:600;margin-top:.15rem;">▲ above 100</div>
+          </div>
+        </div>
+        <p class="visual-caption">Maria Gonzalez, 58F · Type 2 diabetes · last visit 2024-03-14</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-table"></i> Lab results table</h3>
+        <table class="data-table">
+          <thead><tr><th>Test</th><th>LOINC</th><th>Value</th><th>Unit</th><th>Flag</th></tr></thead>
+          <tbody>
+            <tr><td>HbA1c</td><td>4548-4</td><td class="flag-high">9.2</td><td>%</td><td>High</td></tr>
+            <tr><td>LDL</td><td>2089-1</td><td class="flag-high">158</td><td>mg/dL</td><td>High</td></tr>
+            <tr><td>eGFR</td><td>33914-3</td><td class="flag-normal">72</td><td>mL/min</td><td>Normal</td></tr>
+            <tr><td>Potassium</td><td>2823-3</td><td class="flag-normal">4.2</td><td>mmol/L</td><td>Normal</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-lightbulb"></i> Worked example</h3>
+        <div class="example-box">
+          <strong>A FHIR query.</strong> <code>GET /Patient/123/Observation?code=http://loinc.org|4548-4</code> retrieves HbA1c results for patient 123. The LOINC code identifies the lab test; the Observation resource holds value and timestamp. This is the modern, interoperable way to pull clinical data — replacing older HL7 v2 messages.
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-robot"></i></div><h3>AI Tutor · Clinical Informatics</h3><span class="ai-status">ready</span></div>
+      <div class="ai-suggestions" data-lesson="3-3">
+        <button class="ai-suggestion">HL7 vs FHIR — what's the difference?</button>
+        <button class="ai-suggestion">What is clinical decision support?</button>
+        <button class="ai-suggestion">Quiz me</button>
+      </div>
+      <div class="ai-chat" id="chat-3-3"><div class="ai-msg tutor"><div class="avatar">AI</div><div class="bubble">Hello! Ask me about EHRs, FHIR, HL7, terminology standards, or CDS design.</div></div></div>
+      <div class="ai-input-row"><input class="ai-input" type="text" placeholder="Ask about this lesson…" data-lesson="3-3"><button class="ai-send" data-lesson="3-3"><i class="fas fa-paper-plane"></i> Send</button></div>
+    </div>
+  </div>
+
+  <!-- ============ 3.4 TRANSLATIONAL ============ -->
+  <div class="modal" role="dialog" aria-modal="true" id="m-3-4" hidden>
+    <button class="modal-close" aria-label="Close">&times;</button>
+    <div class="lesson-body">
+      <span class="modal-badge badge-mixed">Stage 3 · Lesson 3.4</span>
+      <h2>Translational Bioinformatics</h2>
+      <div class="modal-meta"><span><i class="fas fa-clock"></i> 12 min</span><span><i class="fas fa-flask"></i> pipeline + PGx</span></div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-book"></i> The big idea</h3>
+        <p>Translational bioinformatics connects <strong>bench discoveries to bedside care</strong>. Below is the biomarker pipeline and a real pharmacogenomics variant table.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-route"></i> Biomarker discovery pipeline</h3>
+        <div class="visual-frame">
+          <svg viewBox="0 0 700 160" xmlns="http://www.w3.org/2000/svg" style="min-width:600px;">
+            <!-- stages -->
+            <g font-size="11" text-anchor="middle">
+              <rect x="10" y="40" width="120" height="60" rx="10" fill="#ebf4ff" stroke="#2b6cb0" stroke-width="2"/>
+              <text x="70" y="62" font-weight="700" fill="#2b6cb0">Discovery</text>
+              <text x="70" y="78" font-size="9" fill="#4a5568">omics screen</text>
+              <text x="70" y="91" font-size="9" fill="#4a5568">case–control</text>
+
+              <rect x="150" y="40" width="120" height="60" rx="10" fill="#e6fffa" stroke="#2f855a" stroke-width="2"/>
+              <text x="210" y="62" font-weight="700" fill="#2f855a">Verification</text>
+              <text x="210" y="78" font-size="9" fill="#4a5568">targeted assay</text>
+              <text x="210" y="91" font-size="9" fill="#4a5568">smaller cohort</text>
+
+              <rect x="290" y="40" width="120" height="60" rx="10" fill="#fefcbf" stroke="#d69e2e" stroke-width="2"/>
+              <text x="350" y="62" font-weight="700" fill="#b7791f">Validation</text>
+              <text x="350" y="78" font-size="9" fill="#4a5568">large independent</text>
+              <text x="350" y="91" font-size="9" fill="#4a5568">cohort</text>
+
+              <rect x="430" y="40" width="120" height="60" rx="10" fill="#fed7d7" stroke="#c53030" stroke-width="2"/>
+              <text x="490" y="62" font-weight="700" fill="#c53030">Clinical utility</text>
+              <text x="490" y="78" font-size="9" fill="#4a5568">changes decisions?</text>
+              <text x="490" y="91" font-size="9" fill="#4a5568">outcomes improved?</text>
+
+              <rect x="570" y="40" width="120" height="60" rx="10" fill="#f3e8ff" stroke="#6b46c1" stroke-width="2"/>
+              <text x="630" y="62" font-weight="700" fill="#6b46c1">Clinic</text>
+              <text x="630" y="78" font-size="9" fill="#4a5568">guideline / CDS</text>
+              <text x="630" y="91" font-size="9" fill="#4a5568">patient impact</text>
+            </g>
+            <!-- arrows -->
+            <g stroke="#718096" stroke-width="2" fill="none">
+              <path d="M130,70 L150,70" marker-end="url(#arrow)"/>
+              <path d="M270,70 L290,70" marker-end="url(#arrow)"/>
+              <path d="M410,70 L430,70" marker-end="url(#arrow)"/>
+              <path d="M550,70 L570,70" marker-end="url(#arrow)"/>
+            </g>
+            <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#718096"/></marker></defs>
+            <!-- failure note -->
+            <text x="350" y="130" text-anchor="middle" font-size="10" fill="#c53030" font-style="italic">Most candidates fail at validation — the translational gap</text>
+          </svg>
+          <p class="visual-caption">The biomarker pipeline: each stage is a filter, and most candidates don't make it to the clinic.</p>
+        </div>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-table"></i> Pharmacogenomics — CYP2C19 &amp; clopidogrel</h3>
+        <table class="data-table">
+          <thead><tr><th>Genotype</th><th>Metabolizer status</th><th>Clopidogrel activation</th><th>Recommendation</th></tr></thead>
+          <tbody>
+            <tr><td>*1/*1</td><td>Normal</td><td class="flag-normal">Normal</td><td>Standard dose</td></tr>
+            <tr><td>*1/*2</td><td>Intermediate</td><td>Reduced</td><td>Consider alternative</td></tr>
+            <tr><td>*2/*2</td><td>Poor</td><td class="flag-high">Low</td><td class="flag-high">Use alternative (e.g., prasugrel)</td></tr>
+            <tr><td>*2/*17</td><td>Intermediate</td><td>Reduced</td><td>Consider alternative</td></tr>
+            <tr><td>*17/*17</td><td>Ultrarapid</td><td>Increased</td><td>Standard dose</td></tr>
+          </tbody>
+        </table>
+        <p class="visual-caption">CPIC guidelines translate genotype into prescribing decisions — a direct bench-to-bedside example.</p>
+      </div>
+
+      <div class="lesson-section">
+        <h3><i class="fas fa-lightbulb"></i> Worked example</h3>
+        <div class="example-box">
+          <strong>Pharmacogenomics in practice.</strong> Variants in <em>CYP2C19</em> affect clopidogrel activation. A <em>*2/*2</em> poor metabolizer may not convert the prodrug to its active form, reducing efficacy after stenting. A genotype-guided prescribing decision — informed by bioinformatics pipelines and CPIC guidelines — is a direct bench-to-bedside translation.
+        </div>
+      </div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ai-header"><div class="ai-icon"><i class="fas fa-robot"></i></div><h3>AI Tutor · Translational Bioinformatics</h3><span class="ai-status">ready</span></div>
+      <div class="ai-suggestions" data-lesson="3-4">
+        <button class="ai-suggestion">What is a biomarker pipeline?</button>
+        <button class="ai-suggestion">Explain pharmacogenomics</button>
+        <button class="ai-suggestion">Quiz me</button>
+      </div>
+      <div class="ai-chat" id="chat-3-4"><div class="ai-msg tutor"><div class="avatar">AI</div><div class="bubble">Hi! Ask me about biomarkers, multi-omics, pharmacogenomics, or translating findings to the clinic.</div></div></div>
+      <div class="ai-input-row"><input class="ai-input" type="text" placeholder="Ask about this lesson…" data-lesson="3-4"><button class="ai-send" data-lesson="3-4"><i class="fas fa-paper-plane"></i> Send</button></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  // ==================== AI TUTOR KNOWLEDGE BASE ====================
+  const TUTOR_KB = {
+    '1-1': { name:'General Biology', entries: [
+      { keys:['prokaryote','eukaryote','bacteria','nucleus','organelle'], ans:'Prokaryotes are simple cells without a membrane-bound nucleus (bacteria and archaea). Eukaryotes — plants, animals, fungi — have a nucleus and organelles like mitochondria. The key functional split: compartmentalization lets eukaryotes run complex processes more efficiently.' },
+      { keys:['metabolism','atp','energy','glycolysis','krebs'], ans:'Metabolism is how cells extract and use energy. Glycolysis breaks glucose into pyruvate (net 2 ATP). The Krebs cycle and oxidative phosphorylation in mitochondria yield most ATP. Energy supply constrains what a cell can do — which you\'ll later see as metabolic pathway gene expression in data.' },
+      { keys:['cell theory','cell'], ans:'Cell theory states: (1) all organisms are made of one or more cells, (2) the cell is the basic unit of life, and (3) all cells arise from pre-existing cells. It\'s the unifying principle of biology.' },
+      { keys:['quiz','test','question'], ans:'Quick quiz: 1) Which organelle produces most ATP? (Mitochondria) 2) Do prokaryotes have a nucleus? (No) 3) What molecule carries genetic information? (DNA) 4) Name one difference between plant and animal cells. (Chloroplasts / cell wall). Want explanations?' },
+      { keys:['evolution','natural selection'], ans:'Evolution by natural selection: individuals vary; some variants survive and reproduce better; those traits become more common. It explains biodiversity and why pathogens develop drug resistance — directly relevant to clinical informatics and epidemiology.' }
+    ]},
+    '1-2': { name:'General & Organic Chemistry', entries: [
+      { keys:['carbon','four bonds','backbone'], ans:'Carbon has four valence electrons, so it forms four covalent bonds. That lets it build long chains, branch, and form rings — the structural diversity life requires.' },
+      { keys:['functional group','hydroxyl','carboxyl','amino','phosphate','methyl'], ans:'Functional groups are clusters of atoms that give molecules their behavior: hydroxyl (–OH, polar), carboxyl (–COOH, acidic), amino (–NH₂, basic), phosphate (–PO₄, energy/charge), methyl (–CH₃, nonpolar). Recognizing them lets you predict solubility, reactivity, and biological role.' },
+      { keys:['ph','buffer','acid','base'], ans:'pH measures hydrogen ion concentration. Biological reactions run in a narrow pH range (blood ~7.4). Buffers resist pH change by absorbing or releasing protons. Enzymes are especially pH-sensitive.' },
+      { keys:['quiz','test','question'], ans:'Quick quiz: 1) How many bonds does carbon typically form? (4) 2) Which group makes a molecule acidic? (Carboxyl –COOH) 3) What does a buffer do? (Resists pH change) 4) Is a methyl group polar or nonpolar? (Nonpolar). Want explanations?' },
+      { keys:['polar','nonpolar','solubility'], ans:'Polar molecules have uneven charge distribution (water, –OH); nonpolar share electrons evenly (lipids). "Like dissolves like": polar dissolves in polar. This governs membrane structure and protein folding.' }
+    ]},
+    '1-3': { name:'Physics & Calculus', entries: [
+      { keys:['derivative','rate of change','slope'], ans:'A derivative measures instantaneous rate of change. If C(t) is drug concentration, dC/dt tells you how fast it\'s changing at any moment. Derivatives describe enzyme rates, population growth, and signal dynamics.' },
+      { keys:['integral','area under','accumulation'], ans:'An integral accumulates quantities. The area under a concentration–time curve (AUC) represents total drug exposure — a standard pharmacokinetic measure. Integrals also compute total energy and probability masses.' },
+      { keys:['growth','exponential','logistic'], ans:'Exponential growth (dN/dt = rN) describes unchecked growth. Logistic growth adds a carrying capacity: dN/dt = rN(1 − N/K). The logistic curve is S-shaped and more realistic for biological systems with limits.' },
+      { keys:['quiz','test','question'], ans:'Quick quiz: 1) What does a derivative measure? (Rate of change) 2) What does an integral represent? (Accumulation/area) 3) Which growth model includes a carrying capacity? (Logistic) 4) What does AUC stand for? (Area under the curve). Want detail?' },
+      { keys:['thermodynamics','entropy','energy'], ans:'The laws of thermodynamics govern biological energy: energy is conserved (first law), entropy tends to increase (second law). Cells maintain order by consuming energy — that\'s why metabolism and ATP matter.' }
+    ]},
+    '1-4': { name:'Genetics & Molecular Biology', entries: [
+      { keys:['central dogma','dna','rna','protein','transcription','translation'], ans:'The central dogma: DNA → RNA → protein. DNA is transcribed into mRNA by RNA polymerase; mRNA is translated by ribosomes into a polypeptide chain. This flow is the conceptual core of molecular biology and the basis for interpreting gene expression data.' },
+      { keys:['mutation','point mutation','sickle','variant'], ans:'A point mutation changes a single DNA base. Example: GAG → GTG changes mRNA GAG → GUG, substituting valine for glutamate — the sickle-cell mutation. In bioinformatics, such variants are detected via alignment and variant-calling pipelines (VCF files).' },
+      { keys:['replication','dna polymerase','semi-conservative'], ans:'DNA replication is semi-conservative: each original strand templates a new one, so each daughter molecule keeps one parental strand. DNA polymerase adds nucleotides 5′→3′ and proofreads errors.' },
+      { keys:['regulation','operon','promoter','enhancer'], ans:'Gene regulation controls when/where genes are expressed. Promoters bind RNA polymerase; enhancers boost transcription from a distance. Operons (e.g., lac operon) coordinate genes in prokaryotes. Regulation explains why cells with identical DNA behave so differently.' },
+      { keys:['quiz','test','question'], ans:'Quick quiz: 1) What enzyme makes mRNA? (RNA polymerase) 2) What reads mRNA codons? (Ribosomes) 3) What is a point mutation? (Single-base change) 4) What is the DNA→RNA→protein principle called? (Central dogma). Ask for explanations!' }
+    ]},
+    '2-1': { name:'Python & R', entries: [
+      { keys:['python','r','difference','which'], ans:'Python is general-purpose: pipelines, machine learning, scripting (pandas, scikit-learn). R is built for statistics and visualization (tidyverse, ggplot2). Many teams use Python to process and R to analyze/plot. They complement rather than compete.' },
+      { keys:['pandas','dataframe','filter','groupby'], ans:'pandas is Python\'s tabular data library. <code>df[df.age &gt; 60]</code> filters rows; <code>df.groupby("disease")["biomarker"].mean()</code> summarizes per group. Filter and group-summarize cover a huge share of real biomedical data exploration.' },
+      { keys:['tidyverse','dplyr','ggplot','r code'], ans:'Tidyverse is R\'s data toolkit: dplyr for manipulation, ggplot2 for plots. Example: <code>df %&gt;% filter(age &gt; 60) %&gt;% group_by(disease) %&gt;% summarise(mean_bm = mean(biomarker))</code>. The pipe passes results forward.' },
+      { keys:['quiz','test','question'], ans:'Quick quiz: 1) Which library provides DataFrames in Python? (pandas) 2) What package makes ggplot2 plots? (ggplot2) 3) What does groupby do? (Groups rows for aggregation) 4) Which language is more statistics-focused? (R). Want examples?' },
+      { keys:['visualization','plot','matplotlib'], ans:'Visualization is how you spot patterns and communicate findings. Python: matplotlib/seaborn. R: ggplot2. Always plot distributions before modeling — outliers, missingness, and bimodality often change your plan.' }
+    ]},
+    '2-2': { name:'Statistics & Probability', entries: [
+      { keys:['p-value','p value','significance'], ans:'A p-value is the probability of seeing data at least as extreme as observed, assuming the null is true. It is NOT the probability the null is true. p = 0.0021 with α = 0.05 means reject the null — but always consider effect size and design alongside it.' },
+      { keys:['t-test','anova','chi-square','test choice'], ans:'t-test: compare means of two groups. ANOVA: compare means across three+ groups. Chi-square: association between categorical variables. Choosing correctly depends on outcome type and number of groups.' },
+      { keys:['regression','linear','logistic'], ans:'Linear regression models a continuous outcome from predictors. Logistic regression models a binary outcome and outputs probabilities. Both give interpretable coefficients — key for clinical risk models.' },
+      { keys:['confidence interval','ci'], ans:'A 95% confidence interval is a range that would contain the true parameter in 95% of repeated samples. It conveys precision, unlike a p-value alone. Wider CIs mean more uncertainty — always report intervals with effect estimates.' },
+      { keys:['quiz','test','question'], ans:'Quick quiz: 1) What does a p-value measure? (Probability of data under null) 2) Which test compares 3+ group means? (ANOVA) 3) What does logistic regression predict? (Binary outcomes) 4) What does a 95% CI represent? (Range containing true value in 95% of samples). Want detail?' }
+    ]},
+    '2-3': { name:'Databases & Data Integration', entries: [
+      { keys:['sql','join','select','query'], ans:'SQL queries relational data. <code>SELECT name, value FROM labs WHERE test = "HbA1c"</code> filters rows. <code>JOIN</code> combines tables on a shared key (e.g., patient_id). Joins are the workhorse of integrating EHR tables.' },
+      { keys:['fhir','hl7','standard','interoperability'], ans:'HL7 v2 is the legacy messaging standard; FHIR is the modern RESTful API standard using resources like Patient and Observation. FHIR enables app-level interoperability (e.g., querying patient labs via HTTP).' },
+      { keys:['ehr','ehr data model','patients','encounters','observations'], ans:'An EHR stores demographics, encounters, orders, results, notes, and medications. The core relational pattern: patients → encounters → observations/orders. Integration means linking these across systems using stable identifiers and standard terminologies.' },
+      { keys:['terminology','icd','snomed','loinc'], ans:'ICD = billing/diagnosis codes. SNOMED CT = clinical concepts. LOINC = lab tests. They serve different purposes; mapping between them is a real informatics task. Using the right code system determines whether downstream analytics and CDS work.' },
+      { keys:['quiz','test','question'], ans:'Quick quiz: 1) Which SQL clause combines tables? (JOIN) 2) What is FHIR? (Modern health data API standard) 3) Which terminology codes lab tests? (LOINC) 4) What is a primary key? (Unique row identifier). Want examples?' }
+    ]},
+    '2-4': { name:'Algorithms & Data Structures', entries: [
+      { keys:['big-o','complexity','o(n)','efficiency'], ans:'Big-O describes how runtime/space grows with input size. O(n²) algorithms become impractical on large data; O(n log n) sorting is standard. In bioinformatics, choosing the right complexity can be the difference between minutes vs. days on millions of reads.' },
+      { keys:['dynamic programming','alignment','needleman','sequence'], ans:'Dynamic programming solves problems by combining subproblem solutions. Needleman–Wunsch fills an n×m matrix, each cell from three neighbors — O(n·m) instead of exponential. DP also powers diff tools and spell-checkers.' },
+      { keys:['graph','bfs','dfs','network'], ans:'Graphs model relationships (nodes + edges). BFS explores breadth-first (shortest path in unweighted graphs); DFS explores depth-first (connectivity, cycles). In biology, graphs represent protein interactions and metabolic networks.' },
+      { keys:['hash','table','data structure','tree'], ans:'Core structures: arrays (fast index access), hash tables (O(1) average lookup), trees (hierarchical data), graphs (relationships). Choosing the right one is often more important than micro-optimizing code.' },
+      { keys:['quiz','test','question'], ans:'Quick quiz: 1) What complexity is standard sorting? (O(n log n)) 2) Which algorithm aligns two sequences? (Needleman–Wunsch/DP) 3) What traversal finds shortest unweighted paths? (BFS) 4) What structure gives O(1) average lookup? (Hash table). Want explanations?' }
+    ]},
+    '3-1': { name:'AI & ML in Health', entries: [
+      { keys:['roc','auc','curve','sensitivity','specificity'], ans:'ROC plots true-positive rate (sensitivity) vs. false-positive rate (1 − specificity) across thresholds. AUC summarizes discrimination: 0.5 = random, 1.0 = perfect. But AUC alone isn\'t enough — check calibration and performance in subgroups.' },
+      { keys:['overfit','overfitting','generalization','regularization'], ans:'Overfitting: the model memorizes training noise and fails on new data. Fixes include more data, regularization (L1/L2), cross-validation, and simpler models. In health, overfit models can look great in development and fail in deployment.' },
+      { keys:['leakage','data leakage','bias'], ans:'Data leakage occurs when information from the target leaks into features (e.g., using future labs to predict past outcomes). It inflates performance. Fixes: strict temporal splits, careful feature engineering, and auditing pipeline steps.' },
+      { keys:['cross-validation','validation','split'], ans:'Cross-validation (e.g., 5-fold) rotates held-out data, giving a stable performance estimate. For clinical data, use grouped or temporal splits (by patient or time) to avoid leakage — a random split of repeated patient records can overstate performance.' },
+      { keys:['quiz','test','question'], ans:'Quick quiz: 1) What does AUC = 0.5 mean? (Random) 2) What is overfitting? (Memorizing training noise) 3) Why is leakage dangerous? (Inflates performance) 4) What is calibration? (Predicted probabilities match observed rates). Want detail?' }
+    ]},
+    '3-2': { name:'Bioinformatics: Genomics', entries: [
+      { keys:['fastq','bam','vcf','format'], ans:'FASTQ = raw reads with quality scores. BAM = reads aligned to a reference (binary SAM). VCF = called variants. Pipeline: FASTQ → align (BWA/Bowtie) → BAM → variant call (GATK) → VCF. Each format carries different information.' },
+      { keys:['variant calling','gatk','snp','indel'], ans:'Variant calling compares aligned reads to a reference. Tools like GATK inspect pileups (coverage, base quality) and call SNPs/indels with confidence scores. Output goes to VCF and is annotated (VEP) to predict functional impact.' },
+      { keys:['rna-seq','deseq','expression','differential'], ans:'RNA-seq measures transcript abundance. After alignment/quantification, differential expression tools like DESeq2 model counts and test for differences between conditions. Always account for multiple testing (FDR) and inspect normalized counts before trusting hits.' },
+      { keys:['alignment','blast','bowtie','bwa'], ans:'BLAST searches a sequence against databases (heuristic local alignment). Bowtie/BWA align short reads to a reference genome quickly using indexing. BLAST is similarity search; Bowtie/BWA are read mapping — different jobs.' },
+      { keys:['quiz','test','question'], ans:'Quick quiz: 1) What format holds raw reads? (FASTQ) 2) What tool calls variants? (GATK) 3) What format stores variants? (VCF) 4) What does DESeq2 do? (Differential expression). Want me to explain any step?' }
+    ]},
+    '3-3': { name:'Clinical Informatics & EHR', entries: [
+      { keys:['hl7','fhir','difference'], ans:'HL7 v2 is pipe-delimited messaging, widely used but brittle. FHIR is a modern RESTful standard with resources (Patient, Observation, MedicationRequest) exchanged via HTTP/JSON. FHIR enables app ecosystems; HL7 v2 remains embedded in many hospital interfaces.' },
+      { keys:['cds','clinical decision support','alert','fatigue'], ans:'CDS delivers timely information to clinicians — alerts, order sets, risk scores. Good CDS is specific, actionable, and evidence-based. Alert fatigue is a major failure mode: too many low-value alerts cause clinicians to ignore even critical ones.' },
+      { keys:['terminology','snomed','icd','loinc','code'], ans:'SNOMED CT = clinical concepts (findings, procedures). ICD = billing/diagnosis. LOINC = lab tests. They answer different questions and often need mapping. Using the wrong system breaks analytics and CDS.' },
+      { keys:['ehr','electronic health record','data model'], ans:'An EHR data model links patients, encounters, orders, results, notes, and medications. Integration means joining across these tables using identifiers and standard codes. Real-world data is messy: missing values, free text, and duplicated records are normal challenges.' },
+      { keys:['quiz','test','question'], ans:'Quick quiz: 1) Which standard is RESTful? (FHIR) 2) What does CDS stand for? (Clinical Decision Support) 3) What does LOINC code? (Lab tests) 4) Why is alert fatigue dangerous? (Clinicians ignore alerts). Want details?' }
+    ]},
+    '3-4': { name:'Translational Bioinformatics', entries: [
+      { keys:['biomarker','pipeline','discovery','validation'], ans:'The biomarker pipeline: discovery (omics on case–control cohorts) → verification (targeted assays) → validation (large independent cohorts) → clinical utility (does it change decisions/outcomes?). Most candidates fail at validation — the translational gap is the hard part.' },
+      { keys:['pharmacogenomics','cyp2c19','drug','metabolism'], ans:'Pharmacogenomics links genetic variants to drug response. Example: CYP2C19 poor metabolizers activate clopidogrel less effectively. Genotype-guided prescribing (CPIC guidelines) is a validated translation into practice.' },
+      { keys:['multi-omics','integration','omics'], ans:'Multi-omics integrates genomics, transcriptomics, proteomics, and metabolomics. Each layer captures different biology; integration (e.g., network or factor models) reveals mechanisms invisible in one layer. Challenges: scale, batch effects, sparse overlap.' },
+      { keys:['network medicine','pathway','drug target'], ans:'Network medicine models disease as perturbations in molecular networks. Disease modules (clusters of interacting genes) can suggest drug targets and repurposing opportunities. Pathway analysis (e.g., GSEA) tests whether predefined gene sets are enriched.' },
+      { keys:['quiz','test','question'], ans:'Quick quiz: 1) What is the first step in the biomarker pipeline? (Discovery) 2) What gene affects clopidogrel activation? (CYP2C19) 3) What is multi-omics? (Integrating multiple molecular layers) 4) What is network medicine? (Modeling disease via molecular networks). Want explanations?' }
+    ]}
+  };
+
+  function fallbackAnswer(lessonName) {
+    return `I don't have a specific canned answer for that in ${lessonName}. Try asking about one of the key concepts in this lesson — or use the suggested prompts above. If you want a broader explanation, rephrase using terms from the lesson.`;
+  }
+
+  function getTutorAnswer(lessonId, userText) {
+    const lesson = TUTOR_KB[lessonId];
+    if (!lesson) return "I couldn't find this lesson's knowledge base.";
+    const lower = userText.toLowerCase();
+    let best = null, bestScore = 0;
+    for (const entry of lesson.entries) {
+      let score = 0;
+      for (const key of entry.keys) {
+        if (lower.includes(key.toLowerCase())) score += key.length;
+      }
+      if (score > bestScore) { bestScore = score; best = entry; }
+    }
+    if (best && bestScore > 0) return best.ans;
+    return fallbackAnswer(lesson.name);
+  }
+
+  function addMessage(lessonId, role, text) {
+    const chat = document.getElementById('chat-' + lessonId);
+    if (!chat) return;
+    const msg = document.createElement('div');
+    msg.className = 'ai-msg ' + role;
+    const avatar = document.createElement('div');
+    avatar.className = 'avatar';
+    avatar.textContent = role === 'tutor' ? 'AI' : 'You';
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.innerHTML = text;
+    if (role === 'user') { msg.appendChild(bubble); msg.appendChild(avatar); }
+    else { msg.appendChild(avatar); msg.appendChild(bubble); }
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function showTyping(lessonId) {
+    const chat = document.getElementById('chat-' + lessonId);
+    if (!chat) return null;
+    const msg = document.createElement('div');
+    msg.className = 'ai-msg tutor';
+    msg.id = 'typing-' + lessonId;
+    msg.innerHTML = '<div class="avatar">AI</div><div class="bubble"><span class="typing-dots"><span></span><span></span><span></span></span></div>';
+    chat.appendChild(msg);
+    chat.scrollTop = chat.scrollHeight;
+    return msg;
+  }
+
+  function removeTyping(lessonId) {
+    const el = document.getElementById('typing-' + lessonId);
+    if (el) el.remove();
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; });
+  }
+
+  function handleSend(lessonId) {
+    const input = document.querySelector(`.ai-input[data-lesson="${lessonId}"]`);
+    const text = input.value.trim();
+    if (!text) return;
+    addMessage(lessonId, 'user', escapeHtml(text));
+    input.value = '';
+    showTyping(lessonId);
+    setTimeout(() => {
+      removeTyping(lessonId);
+      addMessage(lessonId, 'tutor', getTutorAnswer(lessonId, text));
+    }, 600 + Math.random() * 500);
+  }
+
+  document.querySelectorAll('.ai-send').forEach(btn => {
+    const lessonId = btn.getAttribute('data-lesson');
+    btn.addEventListener('click', () => handleSend(lessonId));
+  });
+
+  document.querySelectorAll('.ai-input').forEach(input => {
+    const lessonId = input.getAttribute('data-lesson');
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); handleSend(lessonId); }
+    });
+  });
+
+  document.querySelectorAll('.ai-suggestions').forEach(container => {
+    const lessonId = container.getAttribute('data-lesson');
+    container.querySelectorAll('.ai-suggestion').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const text = btn.textContent.trim();
+        addMessage(lessonId, 'user', escapeHtml(text));
+        showTyping(lessonId);
+        setTimeout(() => {
+          removeTyping(lessonId);
+          addMessage(lessonId, 'tutor', getTutorAnswer(lessonId, text));
+        }, 500 + Math.random() * 400);
+      });
+    });
+  });
+
+  // ==================== MODAL OPEN / CLOSE ====================
+  const backdrop = document.getElementById('modal-backdrop');
+  const allModals = backdrop.querySelectorAll('.modal');
+  let lastFocused = null;
+
+  function openModal(id) {
+    allModals.forEach(m => m.hidden = true);
+    const target = document.getElementById(id);
+    if (!target) return;
+    target.hidden = false;
+    backdrop.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    const closeBtn = target.querySelector('.modal-close');
+    if (closeBtn) closeBtn.focus();
+    lastFocused = document.activeElement;
+  }
+
+  function closeModal() {
+    backdrop.classList.remove('open');
+    document.body.style.overflow = '';
+    allModals.forEach(m => m.hidden = true);
+    if (lastFocused) lastFocused.focus();
+  }
+
+  document.querySelectorAll('.destination-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const modalId = card.getAttribute('data-modal');
+      if (modalId) openModal(modalId);
+    });
+  });
+
+  backdrop.addEventListener('click', e => { if (e.target === backdrop) closeModal(); });
+  backdrop.querySelectorAll('.modal-close').forEach(btn => btn.addEventListener('click', closeModal));
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && backdrop.classList.contains('open')) closeModal();
+  });
+})();
+</script>
+</body>
+</html>
